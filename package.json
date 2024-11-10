@@ -1,6 +1,9 @@
 {
   "name": "royalchick-be-platform",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.18.0"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
