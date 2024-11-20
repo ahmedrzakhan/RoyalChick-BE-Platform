@@ -51,7 +51,19 @@ const getOrderItemsByOrderId = async (order_id) => {
     }
 }
 
+const editOrder = async (order, order_id) => {  
+    try {
+        console.log(order);
+        console.log(order_id);
+        const query = `UPDATE orders SET order_type = ?,  total_amount = ?, payment_status = ? WHERE id = ?;`;
+        const result = await pool.execute(query, [order.order_type, order.total_amount,order.payment_status,  3]);
+        return order 
+    } catch (error) {
+        console.log(error)
+    }
+ }
 
-const OrderRepository = { createOrder, createOrderItem, getOrdersByCustomerId, trackOrder, getOrderItemsByOrderId};
+
+const OrderRepository = { createOrder, createOrderItem, getOrdersByCustomerId, trackOrder, getOrderItemsByOrderId, editOrder};
 
 module.exports = {OrderRepository};

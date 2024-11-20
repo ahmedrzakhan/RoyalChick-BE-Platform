@@ -37,6 +37,15 @@ const CreateOrder =async (req, res) => {
         }
     }
 
-  const OrderController = {CreateOrder, createOrderItem, getAllOrdersByCustomer, trackOrder}
+    const editOrder = async (req, res) => {
+        try {
+            const order = await OrderService.editOrder(req.body, req.params.order_id);
+            res.send(order);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+  const OrderController = {CreateOrder, createOrderItem, getAllOrdersByCustomer, trackOrder, editOrder}
 
   module.exports = { OrderController };
