@@ -66,7 +66,7 @@ async function initializeDatabase() {
         quantity int,
         unit_price DOUBLE,
         total_price DOUBLE,
-        special_instruction DOUBLE,
+        special_instruction VARCHAR(100),
         FOREIGN KEY (order_id) REFERENCES orders(id),
         FOREIGN KEY (item_id) REFERENCES menu_items(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
