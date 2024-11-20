@@ -1,17 +1,20 @@
-const findById = (userId) => {
-  const users = [
-    { id: "1", name: "John Doe", email: "john@example.com" },
-    { id: "2", name: "Jane Doe", email: "jane@example.com" },
-  ];
+const {pool} = require("../config/database");
 
-  const user = users.find((u) => u.id === userId);
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+
+const saveUser = async (user) => {
+  // Save user to database
+  const query = "INSERT INTO users (username, email, password, status) VALUES (?, ?, ?, ?)";
+  await pool.execute(query, [user.username, user.email, user.password, user.status]);
   return user;
 };
 
-const UserRepository = { findById };
+const findByEmail = async (email) => {
+  console.log("Email value")
+  const query = "SELECT * FROM users WHERE email = ?";
+  return await pool.execute(query, [email]);
+}
+
+const UserRepository = {  saveUser, findByEmail };
 
 module.exports = UserRepository;

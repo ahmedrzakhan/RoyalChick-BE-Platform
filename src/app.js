@@ -45,7 +45,10 @@ process.on("unhandledRejection", (err) => {
 app.use(Interceptor.responseInterceptor);
 
 app.use("/api/users", userRoutes);
-
+app.use("/api/menu", require("./Routes/menu.routes"));
+app.use("/api/orders", require("./Routes/order.routes"));
+app.use("/api/resturant", require("./Routes/resturant.routes"));
+app.use("/api/employee", require("./Routes/employee.routes"));
 app.use(ErrorHandler.defaultErrorHandler);
 
 // Health check endpoint
@@ -60,8 +63,8 @@ app.get("/health", (req, res) => {
 // Need to await database initialization before starting server
 async function startServer() {
   try {
-    // await testConnection();
-    // await initializeDatabase();
+    await testConnection();
+    await initializeDatabase();
 
     app.listen(PORT, () => {
       log.info(`Server is running on port ${PORT}`);
