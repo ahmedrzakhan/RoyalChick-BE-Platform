@@ -1,24 +1,66 @@
-// Error handling middleware
+const { ValidationError } = require('joi');
+const { CONSTANTS } = require('../config/constants');
+
+class ErrorSerializer {
+  static forClient(err) {
+    const baseResponse = {
+      success: false,
+      error: true,
+      data: null,
+    };
+
+    // For Joi validation errors
+    if (err instanceof ValidationError || err.name === 'ValidationError') {
+      return {
+        ...baseResponse,
+        status: 400,
+        errorMessage: 'Validation Error',
+        details: Array.isArray(err.details)
+          ? err.details.map((detail) => ({
+              field: detail.path.join('.'),
+              message: detail.message,
+            }))
+          : [{ message: err.message }],
+      };
+    }
+
+    // For operational errors (custom AppError instances)
+    if (err.isOperational) {
+      return {
+        ...baseResponse,
+        status: err.statusCode,
+        errorMessage: err.publicMessage || err.message,
+        code: err.clientErrorCode,
+      };
+    }
+
+    // For all other errors
+    return {
+      ...baseResponse,
+      status: err.status || 500,
+      errorMessage:
+        process.env.NODE_ENV === CONSTANTS.PRODUCTION_ENV
+          ? 'Internal Server Error'
+          : err.message,
+    };
+  }
+}
+
 const defaultErrorHandler = (err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || 'Internal Server Error';
+  // Ensure response hasn't been sent yet
+  if (res.headersSent) {
+    return next(err);
+  }
 
-  // Log the error details
-  console.error(
-    `HTTP Status: ${status} Error Message: ${message} Path: ${
-      req.url
-    } Method: ${req.method} Timestamp: ${new Date().toISOString()}`,
-  );
-  console.error(err.stack);
+  // Set response headers
+  res.setHeader('Content-Type', 'application/json');
 
-  res.status(status).json({
-    success: false,
-    error: true,
-    data: null,
-    errorMessage: { message },
-  });
+  // Serialize error for client response
+  const clientResponse = ErrorSerializer.forClient(err);
+
+  // Send response
+  return res.status(clientResponse.status).json(clientResponse);
 };
-
 const ErrorHandler = {
   defaultErrorHandler,
 };
