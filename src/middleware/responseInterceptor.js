@@ -2,6 +2,16 @@
 const responseInterceptor = (req, res, next) => {
   const originalJson = res.json;
   res.json = function (body) {
+    if (
+      body &&
+      'success' in body &&
+      'error' in body &&
+      'data' in body &&
+      'errorMessage' in body
+    ) {
+      return originalJson.call(this, body);
+    }
+
     body = {
       success: true,
       error: false,
