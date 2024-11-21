@@ -110,6 +110,26 @@ async function testConnection() {
   }
 }
 
+
+// Global error handling for unhandled promises
+process.on("unhandledRejection", (err) => {
+  log.error("Unhandled Promise Rejection:", err);
+  // Don't exit the process in production, just log it
+  if (process.env.NODE_ENV === "development") {
+    process.exit(1);
+  }
+});
+
+app.use(Interceptor.responseInterceptor);
+
+app.use("/api/users", userRoutes);
+app.use("/api/menu", require("./Routes/menu.routes"));
+app.use("/api/orders", require("./Routes/order.routes"));
+app.use("/api/resturant", require("./Routes/resturant.routes"));
+app.use("/api/employee", require("./Routes/employee.routes"));
+app.use(ErrorHandler.defaultErrorHandler);
+
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -123,8 +143,8 @@ app.get('/health', (req, res) => {
 // Need to await database initialization before starting server
 async function startServer() {
   try {
-    // await testConnection();
-    // await initializeDatabase();
+    await testConnection();
+    await initializeDatabase();
 
     app.listen(CONFIG.PORT, () => {
       log.info(`Server is running on port ${CONFIG.PORT}`);
