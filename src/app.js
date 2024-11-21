@@ -76,12 +76,12 @@ app.use((err, req, res, next) => {
 });
 
 // 4. API Routes
-app.use('/api/v1', routerV1);
+// app.use('/api/v1', routerV1);
 
 // 5. 404 Handler (after routes but before error handlers)
-app.use((req, res) => {
-  res.status(404).json({ message: 'Resource not found' });
-});
+// app.use((req, res) => {
+//   res.status(404).json({ message: 'Resource not found' });
+// });
 
 // 6. Error handling middleware (always at the end, but before server start)
 app.use(ErrorHandler.defaultErrorHandler);
@@ -122,7 +122,7 @@ process.on("unhandledRejection", (err) => {
 
 app.use(Interceptor.responseInterceptor);
 
-app.use("/api/users", userRoutes);
+app.use("/api/users", require("./Routes/user.route"));
 app.use("/api/menu", require("./Routes/menu.routes"));
 app.use("/api/orders", require("./Routes/order.routes"));
 app.use("/api/resturant", require("./Routes/resturant.routes"));
