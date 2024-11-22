@@ -20,7 +20,7 @@ async function initializeDatabase() {
     `);
     //create restaurants table
     await connection.execute(`
-      CREATE TABLE IF NOT EXISTS resturants (
+      CREATE TABLE IF NOT EXISTS restaurants (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL,
         address_line1 VARCHAR(100) NOT NULL,
@@ -46,7 +46,7 @@ async function initializeDatabase() {
         CREATE TABLE IF NOT EXISTS orders (
         id INT PRIMARY KEY AUTO_INCREMENT,
         customer_id int,
-        resturant_id int,
+        restaurant_id int,
         order_type VARCHAR(20),
      	  status VARCHAR(20),
         total_amount DOUBLE,
@@ -54,7 +54,7 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (customer_id) REFERENCES users(id),
-        FOREIGN KEY (resturant_id) REFERENCES resturants(id)
+        FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
     // create order_items table
@@ -94,7 +94,7 @@ async function initializeDatabase() {
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(100),
         password VARCHAR(100),
-        resturant_id int,
+        restaurant_id int,
         position ENUM('STAFF','MANAGER', 'KITCHEN_STAFF', 'EXECUTIVE') DEFAULT 'STAFF',
         hire_date TIMESTAMP,
         salary DOUBLE,

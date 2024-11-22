@@ -124,7 +124,7 @@ app.use(Interceptor.responseInterceptor);
 app.use('/api/users', require('./Routes/user.route'));
 app.use('/api/menu', require('./Routes/menu.routes'));
 app.use('/api/orders', require('./Routes/order.routes'));
-app.use('/api/resturant', require('./Routes/resturant.routes'));
+app.use('/api/restaurant', require('./Routes/restaurant.routes'));
 app.use('/api/employee', require('./Routes/employee.routes'));
 app.use(ErrorHandler.defaultErrorHandler);
 
