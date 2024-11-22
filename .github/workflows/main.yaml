@@ -25,7 +25,7 @@ jobs:
 
           scp -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOSTNAME }}:/home/api
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOSTNAME }} '
-          cd /home/api &&
+          cd /api &&
           sudo npm install &&
           sudo pm2 stop /src/index.js &&
           sudo pm2 start /src/index.js'
