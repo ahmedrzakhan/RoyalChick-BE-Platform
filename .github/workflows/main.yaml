@@ -19,7 +19,8 @@ jobs:
 
       - name: Transfer and deploy code
         run: |
-          echo ${{ env.PRIVATE_KEY }} > private_key 
+          echo "Setting up the environment"
+          echo "${{ env.PRIVATE_KEY }}" > private_key 
           ls
           chmod 600 private_key
 
