@@ -1,0 +1,27 @@
+name: middleware actions
+on:
+  push:
+    branches:
+      - main
+env:
+  IP_ADDRESS: devops.abubakaramasa.com
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  USERNAME: ${{ secrets.USERNAME }}
+  HOST: ${{ secrets.HOST }}
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+jobs:
+  TRIGGER UPDATE:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          scp -i private_key -r ./ ${USERNAME}@${HOSTNAME}:/home/api
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+          cd /home/api &&
+          sudo npm install &&
+          sudo pm2 stop /src/index.js &&
+          sudo pm2 start /src/index.js'
