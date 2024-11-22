@@ -4,7 +4,7 @@ on:
     branches:
       - main
 env:
-  IP_ADDRESS: devops.abubakaramasa.com
+  IP_ADDRESS: ${{ secrets.HOST }}
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
   USERNAME: ${{ secrets.USERNAME }}
   HOST: ${{ secrets.HOST }}
