@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+
+      - name: Transfer and deploy code
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -i private_key -r ./ ${USERNAME}@${HOSTNAME}:/home/api
