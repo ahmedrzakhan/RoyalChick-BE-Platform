@@ -19,7 +19,22 @@ async function initializeDatabase() {
             INDEX email_index (email)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
-
+    //create employees table
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS employees (
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      name VARCHAR(100) NOT NULL,
+      password VARCHAR(100) NOT NULL,
+      restaurant_id int,
+      position ENUM('STAFF','MANAGER', 'KITCHEN_STAFF', 'EXECUTIVE') DEFAULT 'STAFF',
+      hire_date TIMESTAMP,
+      salary DOUBLE,
+      status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
+      email VARCHAR(100) NOT NULL UNIQUE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+      `);
     await connection.execute(`CREATE TABLE IF NOT EXISTS central_kitchen (
           kitchen_id INT PRIMARY KEY AUTO_INCREMENT,
           name VARCHAR(100) NOT NULL,
@@ -55,12 +70,17 @@ async function initializeDatabase() {
         manager_id int,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (manager_id) REFERENCES users(id),
         INDEX post_code_index (post_code),
         INDEX city_index(city)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
 
+    //fix cirvular reference to employees and restaurants tables
+    await connection.execute(`
+      ALTER TABLE employees
+      ADD FOREIGN KEY (restaurant_id) REFERENCES restaurants(id);
+      `);
+    await connection.execute(`ALTER TABLE restaurants ADD FOREIGN KEY (manager_id) REFERENCES employees(id);`);
     // create menu_items table
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS menu_items (
@@ -113,23 +133,7 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
 
-    //create employees table
-    await connection.execute(`
-      CREATE TABLE IF NOT EXISTS employees (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      name VARCHAR(100) NOT NULL,
-      password VARCHAR(100) NOT NULL,
-      restaurant_id int,
-      position ENUM('STAFF','MANAGER', 'KITCHEN_STAFF', 'EXECUTIVE') DEFAULT 'STAFF',
-      hire_date TIMESTAMP,
-      salary DOUBLE,
-      status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
-      email VARCHAR(100) NOT NULL UNIQUE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-      `);
+
 
     // Analytics tracking for executive insights
     await connection.execute(`CREATE TABLE IF NOT EXISTS revenue_analytics (
