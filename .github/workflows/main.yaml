@@ -25,7 +25,7 @@ jobs:
           chmod 600 private_key
 
           echo "Transferring code to the server"
-          scp -i -o StrictHostKeyChecking=no private_key -r ./ ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
+          scp -o StrictHostKeyChecking=no -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
           echo "Code transferred successfully"
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOSTNAME }} '
           cd /home/ubuntu/api &&
