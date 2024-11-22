@@ -1,4 +1,4 @@
-name: middleware actions
+name:  actions
 on:
   push:
     branches:
@@ -7,9 +7,6 @@ env:
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
   USERNAME: ${{ secrets.USERNAME }}
   HOST: ${{ secrets.HOST }}
-permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read
 jobs:
   TRIGGER_UPDATE:
     runs-on: ubuntu-latest
