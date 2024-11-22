@@ -40,6 +40,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
             cd /home/ubuntu/api/
             sudo npm install
-            sudo pm2 start src/app.js --env-file /home/ubuntu/api/.env
+            su
+            sudo pm2 stop src/app.js
+            sudo pm2 start src/app.js --node-args="--env-file ../.env" 
             echo "Deployment complete"
           EOF
