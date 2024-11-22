@@ -20,7 +20,9 @@ jobs:
 
       - name: Transfer and deploy code
         run: |
-          echo "${{ env.PRIVATE_KEY }} > private_key && chmod 600 private_key
+          echo ${{ env.PRIVATE_KEY }} > private_key 
+          chmod 600 private_key
+
           scp -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOSTNAME }}:/home/api
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOSTNAME }} '
           cd /home/api &&
