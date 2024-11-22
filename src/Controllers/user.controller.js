@@ -1,5 +1,5 @@
 const { UserService } = require('../services/user.service');
-const { generateAccessToken } = require('../Util/jwt.util');
+const { generateAccessToken } = require('../Util/auth.util');
 const getUser = async (req, res) => {
   try {
     res.json(req.user);
