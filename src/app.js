@@ -110,25 +110,23 @@ async function testConnection() {
   }
 }
 
-
 // Global error handling for unhandled promises
-process.on("unhandledRejection", (err) => {
-  log.error("Unhandled Promise Rejection:", err);
+process.on('unhandledRejection', (err) => {
+  log.error('Unhandled Promise Rejection:', err);
   // Don't exit the process in production, just log it
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     process.exit(1);
   }
 });
 
 app.use(Interceptor.responseInterceptor);
 
-app.use("/api/users", require("./Routes/user.route"));
-app.use("/api/menu", require("./Routes/menu.routes"));
-app.use("/api/orders", require("./Routes/order.routes"));
-app.use("/api/resturant", require("./Routes/resturant.routes"));
-app.use("/api/employee", require("./Routes/employee.routes"));
+app.use('/api/users', require('./Routes/user.route'));
+app.use('/api/menu', require('./Routes/menu.routes'));
+app.use('/api/orders', require('./Routes/order.routes'));
+app.use('/api/resturant', require('./Routes/resturant.routes'));
+app.use('/api/employee', require('./Routes/employee.routes'));
 app.use(ErrorHandler.defaultErrorHandler);
-
 
 // Health check endpoint
 app.get('/health', (req, res) => {

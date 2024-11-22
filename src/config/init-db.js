@@ -1,5 +1,5 @@
 // src/config/init-db.js
-const { pool } = require("./database");
+const { pool } = require('./database');
 
 async function initializeDatabase() {
   let connection;
@@ -41,8 +41,8 @@ async function initializeDatabase() {
         INDEX city_index(city)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
-      //create orders table
-      await connection.execute(`
+    //create orders table
+    await connection.execute(`
         CREATE TABLE IF NOT EXISTS orders (
         id INT PRIMARY KEY AUTO_INCREMENT,
         customer_id int,
@@ -57,8 +57,8 @@ async function initializeDatabase() {
         FOREIGN KEY (resturant_id) REFERENCES resturants(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
-      // create order_items table
-      await connection.execute(`
+    // create order_items table
+    await connection.execute(`
         CREATE TABLE IF NOT EXISTS order_items (
         id INT PRIMARY KEY AUTO_INCREMENT,
         order_id int,
@@ -70,16 +70,16 @@ async function initializeDatabase() {
         FOREIGN KEY (order_id) REFERENCES orders(id),
         FOREIGN KEY (item_id) REFERENCES menu_items(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-      `)
-      // create menu_items table
-      await connection.execute(`
+      `);
+    // create menu_items table
+    await connection.execute(`
         CREATE TABLE IF NOT EXISTS menu_items (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(100),
         description VARCHAR(120),
         price DOUBLE,
         image VARCHAR(120),
-        preparation_time TIMESTAMP, 
+        preparation_time TIMESTAMP,
         calories DOUBLE,
         allergens VARCHAR(100),
         status ENUM('available', 'unavailable'),
@@ -87,9 +87,9 @@ async function initializeDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-      `)
-      //create employees table
-      await connection.execute(`
+      `);
+    //create employees table
+    await connection.execute(`
         CREATE TABLE IF NOT EXISTS employees (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(100),
@@ -97,17 +97,17 @@ async function initializeDatabase() {
         resturant_id int,
         position ENUM('staff','manager', 'kitchen_staff', 'executive') DEFAULT 'staff',
         hire_date TIMESTAMP,
-        salary DOUBLE, 
+        salary DOUBLE,
         status ENUM('active', 'inactive') DEFAULT 'active',
         email VARCHAR(100),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        `)
-    console.log("Database initialized successfully");
+        `);
+    console.log('Database initialized successfully');
     return true;
   } catch (error) {
-    console.error("Error initializing database:", error);
+    console.error('Error initializing database:', error);
     throw error;
   } finally {
     if (connection) {

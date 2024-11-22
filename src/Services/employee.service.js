@@ -1,10 +1,9 @@
-const {EmployeeRepository} = require("../Repositories/employee.repository");
+const { EmployeeRepository } = require('../Repositories/employee.repository');
 
-const createNewEmployee = async (employee) => { 
-    return await EmployeeRepository.createEmployee(employee);
+const createNewEmployee = async (employee) => {
+  return await EmployeeRepository.createEmployee(employee);
+};
 
-}
+const EmployeeService = { createNewEmployee };
 
-const EmployeeService = {createNewEmployee}
-
-module.exports = {EmployeeService}
+module.exports = { EmployeeService };

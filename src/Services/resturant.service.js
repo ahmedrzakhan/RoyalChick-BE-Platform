@@ -1,9 +1,8 @@
-const {ResturanRepository} = require("../Repositories/resturant.repository");
+const { ResturanRepository } = require('../Repositories/resturant.repository');
 
+const saveResturant = async (resturant) => {
+  return await ResturanRepository.createRestorant(resturant);
+};
+const ResturantService = { saveResturant };
 
-const saveResturant = async (resturant)=>{
-    return await ResturanRepository.createRestorant(resturant);
-}
-const ResturantService = {saveResturant} 
-
-module.exports={ResturantService}
+module.exports = { ResturantService };

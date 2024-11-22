@@ -1,5 +1,8 @@
 const express = require('express');
-const {MenuController, getAllMenu} = require("../Controllers/menuItem.controller");
+const {
+  MenuController,
+  getAllMenu,
+} = require('../Controllers/menuItem.controller');
 const router = express.Router();
 
 //create a new menu

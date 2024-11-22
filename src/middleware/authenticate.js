@@ -1,10 +1,10 @@
 const authenticateUser = (req, res, next) => {
-  console.log("auth user");
+  console.log('auth user');
   next();
 };
 
 const authenticateInternal = (req, res, next) => {
-  console.log("auth Internal");
+  console.log('auth Internal');
   next();
 };
 
