@@ -4,7 +4,6 @@ on:
     branches:
       - main
 env:
-  IP_ADDRESS: ${{ secrets.HOST }}
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
   USERNAME: ${{ secrets.USERNAME }}
   HOST: ${{ secrets.HOST }}
@@ -24,10 +23,11 @@ jobs:
           chmod 600 private_key
 
           echo "Transferring code to the server"
-          scp -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOSTNAME }}:/api
+          scp -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
           echo "Code transferred successfully"
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOSTNAME }} '
-          cd /api &&
+          cd /home/ubuntu/api &&
           sudo npm install &&
-          sudo pm2 stop /src/index.js &&
-          sudo pm2 start /src/index.js'
+          sudo pm2 stop src/index.js &&
+          sudo pm2 start src/index.js'
+          EOF
