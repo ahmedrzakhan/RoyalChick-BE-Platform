@@ -27,14 +27,12 @@ jobs:
           scp -o StrictHostKeyChecking=no -i private_key -r ./* ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
           echo "Code transferred successfully"
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOST }} << EOF
-            export DB_HOST=${{ secrets.DB_HOST }}
-            export DB_USER=${{ secrets.DB_USER }}
-            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            export DB_NAME=${{ secrets.DB_NAME }}
-            export ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}
+            export DB_HOST="${{ secrets.DB_HOST }}"
+            export DB_USER="${{ secrets.DB_USER }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export DB_NAME="${{ secrets.DB_NAME }}"
+            export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
 
-            echo "DB_HOST: $DB_HOST"
-            echo "DB_USER: $DB_USER"
             cd /home/ubuntu/api/
             sudo npm install
             sudo pm2 start app.js
