@@ -1,4 +1,4 @@
-const UserRepository = require('../repositories/user.repository');
+const UserRepository = require('../Repositories/user.repository');
 
 const getUserById = (userId) => {
   return UserRepository.findById(userId);

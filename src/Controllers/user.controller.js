@@ -1,4 +1,4 @@
-const { UserService } = require('../services/user.service');
+const { UserService } = require('../Services/user.service');
 const { generateAccessToken } = require('../Util/auth.util');
 const getUser = async (req, res) => {
   try {
