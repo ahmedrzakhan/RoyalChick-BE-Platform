@@ -29,6 +29,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOST }} << EOF
           cd /home/ubuntu/api &&
           sudo npm install &&
-          sudo pm2 stop src/index.js &&
-          sudo pm2 start src/index.js
+          sudo pm2 stop src/app.js &&
+          sudo pm2 start src/app.js
           EOF
