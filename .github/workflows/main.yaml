@@ -42,6 +42,6 @@ jobs:
             sudo npm install
             su
             sudo pm2 stop src/app.js
-            sudo pm2 start src/app.js --node-args="--env-file ../.env" 
+            sudo pm2 start src/app.js --node-args="--env-file .env"
             echo "Deployment complete"
           EOF
