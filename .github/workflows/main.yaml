@@ -21,11 +21,10 @@ jobs:
         run: |
           echo "Setting up the environment"
           echo "${{ env.PRIVATE_KEY }}" > private_key 
-          ls
           chmod 600 private_key
 
           echo "Transferring code to the server"
-          scp -o StrictHostKeyChecking=no -i private_key -r ./ ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
+          scp -o StrictHostKeyChecking=no -i private_key -r . ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
           echo "Code transferred successfully"
           ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOSTNAME }} '
           cd /home/ubuntu/api &&
