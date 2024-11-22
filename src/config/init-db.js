@@ -88,7 +88,7 @@ async function initializeDatabase() {
       customer_id int NOT NULL,
       restaurant_id int NOT NULL,
       status ENUM('PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED') NOT NULL,
-      total_amount DOUBLE NOT NULL DEFAULT 0
+      total_amount DOUBLE NOT NULL DEFAULT 0,
       payment_status VARCHAR(12),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

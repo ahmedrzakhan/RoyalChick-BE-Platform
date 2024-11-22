@@ -2,15 +2,14 @@ const { pool } = require('../config/database');
 
 const createOrder = async (order, customer_id) => {
   try {
-    const query = `INSERT INTO orders (customer_id, restaurant_id, order_type, total_amount, payment_status) VALUES (?,?,?,?,?);`;
+    const query = `INSERT INTO orders (customer_id, restaurant_id, total_amount, payment_status) VALUES (?,?,?,?);`;
     const result = await pool.execute(query, [
       customer_id,
       order.restaurant_id,
-      order.order_type,
       order.total_amount,
       order.payment_status,
     ]);
-    return order;
+    return {...order, id: result[0].insertId};
   } catch (error) {
     console.log(error);
   }
@@ -65,11 +64,8 @@ const getOrderItemsByOrderId = async (order_id) => {
 
 const editOrder = async (order, order_id) => {
   try {
-    console.log(order);
-    console.log(order_id);
-    const query = `UPDATE orders SET order_type = ?,  total_amount = ?, payment_status = ? WHERE id = ?;`;
+    const query = `UPDATE orders SET  total_amount = ?, payment_status = ? WHERE id = ?;`;
     const result = await pool.execute(query, [
-      order.order_type,
       order.total_amount,
       order.payment_status,
       3,
