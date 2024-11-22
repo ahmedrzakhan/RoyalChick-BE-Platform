@@ -26,14 +26,21 @@ jobs:
           echo "Transferring code to the server"
           scp -o StrictHostKeyChecking=no -i private_key -r ./* ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
           echo "Code transferred successfully"
-          ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USERNAME }}@${{ env.HOST }} << EOF
-            export DB_HOST="${{ secrets.DB_HOST }}"
-            export DB_USER="${{ secrets.DB_USER }}"
-            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export DB_NAME="${{ secrets.DB_NAME }}"
-            export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
+          # Creating .env file on EC2
+          echo "Creating .env file with secrets"
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/ubuntu/api/.env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> /home/ubuntu/api/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/ubuntu/api/.env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/ubuntu/api/.env
+            echo "ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}" >> /home/ubuntu/api/.env
+          EOF
 
+          echo "Starting SSH session to deploy"
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
             cd /home/ubuntu/api/
             sudo npm install
+            sudo pm2 stop app.js
             sudo pm2 start app.js
+            echo "Deployment complete"
           EOF
