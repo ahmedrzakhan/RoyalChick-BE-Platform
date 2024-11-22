@@ -29,7 +29,7 @@ jobs:
           # Creating .env file on EC2
           echo "Creating .env file with secrets"
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/ubuntu/api/.env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" > /home/ubuntu/api/.env
             echo "DB_USER=${{ secrets.DB_USER }}" >> /home/ubuntu/api/.env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/ubuntu/api/.env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/ubuntu/api/.env
@@ -40,7 +40,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
             cd /home/ubuntu/api/
             sudo npm install
-            sudo pm2 stop app.js
-            sudo pm2 start app.js
+            sudo pm2 start src/app.js --env-file /home/ubuntu/api/.env
             echo "Deployment complete"
           EOF
