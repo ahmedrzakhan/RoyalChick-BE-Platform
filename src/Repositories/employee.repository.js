@@ -16,6 +16,12 @@ const createEmployee = async (employee) => {
   return employee;
 };
 
-const EmployeeRepository = { createEmployee };
+const getEmployeeByEmail = async (email) => {
+    const query = `SELECT * FROM employees WHERE email = ?;`;
+    const result = await pool.execute(query, [email]);
+    return result[0];
+}
 
-module.exports = { EmployeeRepository };
+const EmployeeRepository = { createEmployee, getEmployeeByEmail };
+
+module.exports = { EmployeeRepository, getEmployeeByEmail };
