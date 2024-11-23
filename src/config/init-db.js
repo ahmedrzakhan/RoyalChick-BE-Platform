@@ -36,7 +36,7 @@ async function initializeDatabase() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
     await connection.execute(`CREATE TABLE IF NOT EXISTS central_kitchen (
-          kitchen_id INT PRIMARY KEY AUTO_INCREMENT,
+          id INT PRIMARY KEY AUTO_INCREMENT,
           name VARCHAR(100) NOT NULL,
           address VARCHAR(255) NOT NULL,
           city VARCHAR(100) NOT NULL,
@@ -46,7 +46,7 @@ async function initializeDatabase() {
           status ENUM('ACTIVE', 'INACTIVE', 'RENOVATING') DEFAULT 'ACTIVE',
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          FOREIGN KEY (manager_id) REFERENCES users(id),
+          FOREIGN KEY (manager_id) REFERENCES employees(id),
           INDEX city_index (city),
           INDEX postcode_index (postcode)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -80,7 +80,9 @@ async function initializeDatabase() {
       ALTER TABLE employees
       ADD FOREIGN KEY (restaurant_id) REFERENCES restaurants(id);
       `);
-    await connection.execute(`ALTER TABLE restaurants ADD FOREIGN KEY (manager_id) REFERENCES employees(id);`);
+    await connection.execute(
+      `ALTER TABLE restaurants ADD FOREIGN KEY (manager_id) REFERENCES employees(id);`,
+    );
     // create menu_items table
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS menu_items (
@@ -133,8 +135,6 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
 
-
-
     // Analytics tracking for executive insights
     await connection.execute(`CREATE TABLE IF NOT EXISTS revenue_analytics (
       id INT PRIMARY KEY AUTO_INCREMENT,
@@ -182,27 +182,21 @@ async function initializeDatabase() {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
-    // Kitchen performance metrics
-    await connection.execute(`CREATE TABLE IF NOT EXISTS kitchen_metrics (
+    // Restaurant performance metrics
+    await connection.execute(`CREATE TABLE IF NOT EXISTS restaurant_metrics (
     id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
     date DATE NOT NULL,
-    avg_preparation_time INT, -- in minutes
     total_orders_completed INT,
-    total_orders_delayed INT,
-    waste_amount DECIMAL(10,2), -- in monetary value
-    inventory_level_end_day JSON, -- store as {"item_id": quantity}
-    staff_attendance JSON, -- store as {"staff_id": hours_worked}
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
     INDEX kitchen_date_index (restaurant_id, date),
-    INDEX date_metrics (date, avg_preparation_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
-    // Create inventory table (should be after restaurants and menu_items)
+    // Create inventory table
     await connection.execute(`CREATE TABLE IF NOT EXISTS inventory (
-    inventory_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
     item_id INT NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
@@ -220,25 +214,27 @@ async function initializeDatabase() {
 
     // Create inventory_transactions table
     await connection.execute(`CREATE TABLE IF NOT EXISTS inventory_transactions (
-    transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     inventory_id INT NOT NULL,
-    kitchen_id INT,
+    kitchen_id INT NOT NULL,
+    restaurant_id INT NOT NULL,
     type ENUM('RESTOCK', 'USAGE', 'WASTE', 'TRANSFER') NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     recorded_by INT NOT NULL,
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id),
+    FOREIGN KEY (inventory_id) REFERENCES inventory(id),
     FOREIGN KEY (kitchen_id) REFERENCES central_kitchen(kitchen_id),
-    FOREIGN KEY (recorded_by) REFERENCES users(id),
+    INDEX restaurant_index (restaurant_id),
+    FOREIGN KEY (recorded_by) REFERENCES employees(id),
     INDEX transaction_date_index (transaction_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
     // Create shifts table first (needed for attendance)
     await connection.execute(`CREATE TABLE IF NOT EXISTS shifts (
-    shift_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
     shift_start TIME NOT NULL,
     shift_end TIME NOT NULL,
@@ -250,7 +246,7 @@ async function initializeDatabase() {
 
     // Create attendance table (should be after employees and shifts)
     await connection.execute(`CREATE TABLE IF NOT EXISTS attendance (
-    attendance_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     employee_id INT NOT NULL,
     shift_id INT NOT NULL,
     clock_in TIMESTAMP,
@@ -260,7 +256,7 @@ async function initializeDatabase() {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES employees(id),
-    FOREIGN KEY (shift_id) REFERENCES shifts(shift_id),
+    FOREIGN KEY (shift_id) REFERENCES shifts(id),
     INDEX employee_index (employee_id),
     INDEX shift_index (shift_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
