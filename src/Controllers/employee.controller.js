@@ -27,6 +27,29 @@ const generateEmployeeToken = async (req, res) => {
     }
 };
 
+const updateEmployee = async (req, res) => {
+    try {
+        const employee = await EmployeeService.getEmployeeByEmail(req.params.email);
+        const modifiedEmployee = {
+            restaurant_id: req.body.restaurant_id? req.body.restaurant_id : employee[0].restaurant_id,
+            position: req.body.position? req.body.position : employee[0].position,
+            salary: req.body.salary? req.body.salary : employee[0].salary,
+            status: req.body.status? req.body.status : employee[0].status,
+        }
+        await EmployeeService.updateEmployee(req.params.email, modifiedEmployee);
+        res.send({ message: 'Employee updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+const getSignedInEmployee = async (req, res) => {
+    try {
+        delete req.user.password;
+        res.send(req.user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 const createStaffOrder = async (req, res) => {};
 
 const staffOrderStatus = async (req, res) => {};
@@ -35,6 +58,6 @@ const staffAttendance = async (req, res) => {};
 
 const staffTaks = async (req, res) => {};
 
-const EmployeeController = { createEmployee, generateEmployeeToken };
+const EmployeeController = { createEmployee, generateEmployeeToken,updateEmployee, getSignedInEmployee };
 
 module.exports = { EmployeeController };

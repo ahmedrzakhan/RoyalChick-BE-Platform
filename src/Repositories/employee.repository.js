@@ -22,6 +22,18 @@ const getEmployeeByEmail = async (email) => {
     return result[0];
 }
 
-const EmployeeRepository = { createEmployee, getEmployeeByEmail };
+const updateEmployee = async (email, employee) => {
+    const query = `UPDATE employees SET restaurant_id = ?, position = ?, salary = ?, status = ? WHERE email = ?;`;
+    await pool.execute(query, [
+        employee.restaurant_id,
+        employee.position,
+        employee.salary,
+        employee.status,
+        email
+    ]);
+    return employee;
+}
+
+const EmployeeRepository = { createEmployee, getEmployeeByEmail, updateEmployee };
 
 module.exports = { EmployeeRepository, getEmployeeByEmail };

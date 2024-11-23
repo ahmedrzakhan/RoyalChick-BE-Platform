@@ -35,10 +35,10 @@ const verifyTokenForEmployee = async (req, res, next) => {
         next(error);
     }
 }
-
+//In addition, manager and exexcutive can perform staff actions
 const verifyUserTypeIsStaff = async (req, res, next) => {
   try {
-    if (req.user.position !== 'STAFF') return res.status(403).send('Forbidden');
+    if (req.user.position !== 'STAFF' && req.user.position!=='MANAGER' && req.user.position!='EXECUTIVE') return res.status(403).send('Forbidden');
     next();
   } catch (error) {
     next(error);
@@ -47,7 +47,7 @@ const verifyUserTypeIsStaff = async (req, res, next) => {
 
 const verifyUserTypeIsManager = async (req, res, next) => {
     try {
-        if (req.user.position !== 'MANAGER') return res.status(403).send('Forbidden');
+        if (req.user.position !== 'MANAGER'&&req.user.position!=='EXECUTIVE') return res.status(403).send('Forbidden');
         next();
     } catch (error) {
         next(error);

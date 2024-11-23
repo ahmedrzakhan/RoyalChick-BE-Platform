@@ -7,6 +7,10 @@ const createNewEmployee = async (employee) => {
 const getEmployeeByEmail = async (email) => {
     return await EmployeeRepository.getEmployeeByEmail(email);
 }
-const EmployeeService = { createNewEmployee, getEmployeeByEmail };
+
+const updateEmployee = async (email, employee) => {
+    return await EmployeeRepository.updateEmployee(email, employee);
+}
+const EmployeeService = { createNewEmployee, getEmployeeByEmail, updateEmployee };
 
 module.exports = { EmployeeService };

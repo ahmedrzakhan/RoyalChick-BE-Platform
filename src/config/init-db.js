@@ -190,7 +190,7 @@ async function initializeDatabase() {
     total_orders_completed INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
-    INDEX kitchen_date_index (restaurant_id, date),
+    INDEX kitchen_date_index (restaurant_id, date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
