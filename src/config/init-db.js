@@ -194,7 +194,7 @@ async function initializeDatabase() {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
-    // Create inventory table (should be after restaurants and menu_items)
+    // Create inventory table
     await connection.execute(`CREATE TABLE IF NOT EXISTS inventory (
     id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
@@ -227,7 +227,7 @@ async function initializeDatabase() {
     FOREIGN KEY (inventory_id) REFERENCES inventory(id),
     FOREIGN KEY (kitchen_id) REFERENCES central_kitchen(kitchen_id),
     INDEX restaurant_index (restaurant_id),
-    FOREIGN KEY (recorded_by) REFERENCES users(id),
+    FOREIGN KEY (recorded_by) REFERENCES employees(id),
     INDEX transaction_date_index (transaction_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
