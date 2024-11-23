@@ -36,7 +36,7 @@ async function initializeDatabase() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
     await connection.execute(`CREATE TABLE IF NOT EXISTS central_kitchen (
-          kitchen_id INT PRIMARY KEY AUTO_INCREMENT,
+          id INT PRIMARY KEY AUTO_INCREMENT,
           name VARCHAR(100) NOT NULL,
           address VARCHAR(255) NOT NULL,
           city VARCHAR(100) NOT NULL,
