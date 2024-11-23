@@ -182,21 +182,15 @@ async function initializeDatabase() {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
-    // Kitchen performance metrics
-    await connection.execute(`CREATE TABLE IF NOT EXISTS kitchen_metrics (
+    // Restaurant performance metrics
+    await connection.execute(`CREATE TABLE IF NOT EXISTS restaurant_metrics (
     id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
     date DATE NOT NULL,
-    avg_preparation_time INT, -- in minutes
     total_orders_completed INT,
-    total_orders_delayed INT,
-    waste_amount DECIMAL(10,2), -- in monetary value
-    inventory_level_end_day JSON, -- store as {"item_id": quantity}
-    staff_attendance JSON, -- store as {"staff_id": hours_worked}
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
     INDEX kitchen_date_index (restaurant_id, date),
-    INDEX date_metrics (date, avg_preparation_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
 
@@ -222,7 +216,8 @@ async function initializeDatabase() {
     await connection.execute(`CREATE TABLE IF NOT EXISTS inventory_transactions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     inventory_id INT NOT NULL,
-    kitchen_id INT,
+    kitchen_id INT NOT NULL,
+    restaurant_id INT NOT NULL,
     type ENUM('RESTOCK', 'USAGE', 'WASTE', 'TRANSFER') NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -231,6 +226,7 @@ async function initializeDatabase() {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (inventory_id) REFERENCES inventory(id),
     FOREIGN KEY (kitchen_id) REFERENCES central_kitchen(kitchen_id),
+    INDEX restaurant_index (restaurant_id),
     FOREIGN KEY (recorded_by) REFERENCES users(id),
     INDEX transaction_date_index (transaction_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
