@@ -214,7 +214,7 @@ async function initializeDatabase() {
 
     // Create inventory_transactions table
     await connection.execute(`CREATE TABLE IF NOT EXISTS inventory_transactions (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    transaction_id INT PRIMARY KEY AUTO_INCREMENT,
     inventory_id INT NOT NULL,
     kitchen_id INT NOT NULL,
     type ENUM('RESTOCK', 'USAGE', 'WASTE', 'TRANSFER') NOT NULL,

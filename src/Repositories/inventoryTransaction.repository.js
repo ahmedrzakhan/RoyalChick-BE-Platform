@@ -64,8 +64,30 @@ const getInventoryTransactions = async (queryOptions) => {
   }
 };
 
+const getInventoryTransactionById = async (inventoryTransactionId) => {
+  try {
+    const query = `
+    SELECT
+        it.*
+    FROM inventory_transactions it
+    WHERE it.transaction_id = ${inventoryTransactionId}
+`;
+
+    const [results] = await pool.query(query);
+    return results;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch inventory transcation by id',
+      'GET_INVENTORY_TRANSACTIONS',
+      'GET_INVENTORY_TRANSACTIONS_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
 const InventoryTransactionRepository = {
   getInventoryTransactions,
+  getInventoryTransactionById,
 };
 
 module.exports = { InventoryTransactionRepository };

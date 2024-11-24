@@ -8,8 +8,15 @@ const getInventoryTransactionsSchema = {
   }),
 };
 
+const getInventoryTransactionByIdSchema = {
+  params: Joi.object({
+    inventoryTransactionId: Joi.number().integer().min(1).required(),
+  }),
+};
+
 const InventoryTransactionsValidation = {
   getInventoryTransactionsSchema,
+  getInventoryTransactionByIdSchema,
 };
 
 module.exports = {

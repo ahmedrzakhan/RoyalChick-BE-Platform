@@ -22,8 +22,27 @@ const getInventoryTransactions = async (queryOptions) => {
   }
 };
 
+const getInventoryTransactionById = async (inventoryTransactionId) => {
+  try {
+    const result =
+      await InventoryTransactionRepository.getInventoryTransactionById(
+        inventoryTransactionId,
+      );
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch inventory transcation by id',
+      'GET_INVENTORY_TRANSACTIONS',
+      'GET_INVENTORY_TRANSACTIONS_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const InventoryTransactionService = {
   getInventoryTransactions,
+  getInventoryTransactionById,
 };
 
 module.exports = { InventoryTransactionService };
