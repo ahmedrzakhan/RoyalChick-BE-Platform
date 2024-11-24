@@ -2,10 +2,12 @@ const express = require('express');
 const {
   CentralKitchenController,
 } = require('../Controllers/centralKitchen.controller');
+const { SupplierController } = require('../Controllers/supplier.controller');
 const validateRequest = require('../middleware/validateRequest');
 const {
   CentralKitchenValidation,
 } = require('../Validation/centralKitchen.validation');
+const { SupplierValidation } = require('../Validation/supplier.validation');
 
 const router = express.Router();
 
@@ -19,6 +21,12 @@ router.get(
   '/kitchen/:kitchenId',
   validateRequest(CentralKitchenValidation.getCentralKitchenByIdSchema),
   CentralKitchenController.getCentralKitchenById,
+);
+
+router.get(
+  '/supplier',
+  validateRequest(SupplierValidation.getSuppliersSchema),
+  SupplierController.getSuppliers,
 );
 
 module.exports = router;

@@ -9,12 +9,15 @@ const { Autheticator } = require('./../middleware/authenticate');
 const router = express.Router();
 
 // router.use('/staff', authenticateStaff, staffRouter);
+
 router.use(
   '/kitchenStaff',
   Autheticator.authenticateKitchenStaff,
   kitenStaffRouter,
 );
+
 router.use('/manager', Autheticator.authenticateManager, mangerRouter);
+
 router.use('/executive', Autheticator.authenticateExecutive, executiveRouter);
 
 module.exports = router;
