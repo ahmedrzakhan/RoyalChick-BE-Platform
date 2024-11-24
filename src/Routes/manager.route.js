@@ -1,8 +1,24 @@
 const express = require('express');
-const { UserController } = require('../Controllers/user.controller');
-//
+const {
+  CentralKitchenController,
+} = require('../Controllers/centralKitchen.controller');
+const validateRequest = require('../middleware/validateRequest');
+const {
+  CentralKitchenValidation,
+} = require('../Validation/centralKitchen.validation');
+
 const router = express.Router();
 
-router.get('/:id', UserController.getUser);
+router.get(
+  '/kitchen',
+  validateRequest(CentralKitchenValidation.getCentralKitchensSchema),
+  CentralKitchenController.getCentralKitchens,
+);
+
+router.get(
+  '/kitchen/:kitchenId',
+  validateRequest(CentralKitchenValidation.getCentralKitchenByIdSchema),
+  CentralKitchenController.getCentralKitchenById,
+);
 
 module.exports = router;

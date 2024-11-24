@@ -14,7 +14,7 @@ router.use(
   Autheticator.authenticateKitchenStaff,
   kitenStaffRouter,
 );
-// router.use('/manager', authenticateManager, mangerRouter);
+router.use('/manager', Autheticator.authenticateManager, mangerRouter);
 router.use('/executive', Autheticator.authenticateExecutive, executiveRouter);
 
 module.exports = router;
