@@ -73,4 +73,12 @@ router.get(
   InventoryTransactionsController.getInventoryTransactions,
 );
 
+router.get(
+  '/inventoryTransactions/:inventoryTransactionId',
+  validateRequest(
+    InventoryTransactionsValidation.getInventoryTransactionByIdSchema,
+  ),
+  InventoryTransactionsController.getInventoryTransactionById,
+);
+
 module.exports = router;
