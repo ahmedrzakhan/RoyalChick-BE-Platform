@@ -41,4 +41,10 @@ router.post(
   SupplierController.createSupplier,
 );
 
+router.post(
+  '/supplier/:supplierId',
+  validateRequest(SupplierValidation.updateSupplierByIdSchema),
+  SupplierController.updateSupplierById,
+);
+
 module.exports = router;

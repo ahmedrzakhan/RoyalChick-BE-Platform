@@ -134,10 +134,51 @@ const createSupplier = async (queryOptions) => {
   }
 };
 
+const updateSupplierById = async (supplierId, supplierUpdates) => {
+  try {
+    // Create updates array and values array from kitchenUpdates object
+    const updates = [];
+    const values = [];
+
+    Object.entries(supplierUpdates).forEach(([key, value]) => {
+      updates.push(`${key} = ?`);
+      values.push(value);
+    });
+
+    // First, perform the UPDATE
+    const updateQuery = `
+     UPDATE suppliers
+     SET ${updates.join(', ')}
+     WHERE id = ?`;
+
+    values.push(supplierId);
+    await pool.query(updateQuery, values);
+
+    // Then, fetch the updated record
+    const selectQuery = `
+     SELECT *
+     FROM suppliers
+     WHERE id = ?`;
+
+    const [rows] = await pool.query(selectQuery, [supplierId]);
+    return rows[0];
+  } catch (error) {
+    logger.error(
+      'Failed to update supplier',
+      'UPDATE_SUPPLIER',
+      'UPDATE_SUPPLIER_BY_ID',
+      error,
+      { supplierId },
+    );
+    throw error;
+  }
+};
+
 const SupplierRepository = {
   getSuppliers,
   getSupplierById,
   createSupplier,
+  updateSupplierById,
 };
 
 module.exports = { SupplierRepository };

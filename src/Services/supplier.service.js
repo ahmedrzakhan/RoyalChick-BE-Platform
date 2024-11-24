@@ -47,10 +47,30 @@ const createSupplier = async (queryOptions) => {
   }
 };
 
+const updateSupplierById = async (supplierId, supplierUpdates) => {
+  try {
+    const result = await SupplierRepository.updateSupplierById(
+      supplierId,
+      supplierUpdates,
+    );
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to update supplier',
+      'UPDATE_SUPPLIER',
+      'UPDATE_SUPPLIER_BY_ID',
+      error,
+      { supplierId },
+    );
+    throw error;
+  }
+};
+
 const SupplierService = {
   getSuppliers,
   getSupplierById,
   createSupplier,
+  updateSupplierById,
 };
 
 module.exports = { SupplierService };

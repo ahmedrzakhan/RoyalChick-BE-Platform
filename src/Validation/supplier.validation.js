@@ -28,10 +28,26 @@ const createSupplierSchema = {
   }),
 };
 
+const updateSupplierByIdSchema = {
+  params: Joi.object({
+    supplierId: Joi.number().integer().min(1).required(),
+  }),
+  body: Joi.object({
+    name: Joi.string().min(2).max(100).trim(),
+    contact_person: Joi.string().max(100).allow(null, '').trim(),
+    email: Joi.string().email().max(100).trim(),
+    phone: Joi.string().pattern(/^[+]?[\d\s-]{8,15}$/),
+    address: Joi.string().allow(null, '').trim(),
+    payment_terms: Joi.string().max(100).allow(null, '').trim(),
+    status: Joi.string().valid('ACTIVE', 'INACTIVE'),
+  }),
+};
+
 const SupplierValidation = {
   getSuppliersSchema,
   getSupplierByIdSchema,
   createSupplierSchema,
+  updateSupplierByIdSchema,
 };
 
 module.exports = {

@@ -78,10 +78,38 @@ const createSupplier = async (req, res, next) => {
   }
 };
 
+const updateSupplierById = async (req, res, next) => {
+  try {
+    const { supplierId } = req.params;
+    const supplierData = req.body;
+    const supplierUpdates = {};
+    for (const [key, value] of Object.entries(supplierData)) {
+      if (value !== undefined) {
+        supplierUpdates[key] = value;
+      }
+    }
+    const result = await SupplierService.updateSupplierById(
+      supplierId,
+      supplierUpdates,
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to update supplier',
+      'UPDATE_SUPPLIER',
+      'UPDATE_SUPPLIER_BY_ID',
+      error,
+      { kitchenId: req.params.kitchenId },
+    );
+    return next(error);
+  }
+};
+
 const SupplierController = {
   getSuppliers,
   getSupplierById,
   createSupplier,
+  updateSupplierById,
 };
 
 module.exports = { SupplierController };
