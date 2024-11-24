@@ -75,10 +75,39 @@ const createInventoryTransaction = async (req, res, next) => {
   }
 };
 
+const updateInventoryTransactionById = async (req, res, next) => {
+  try {
+    const { inventoryTransactionId } = req.params;
+    const trnxData = req.body;
+    const trnxUpdates = {};
+    for (const [key, value] of Object.entries(trnxData)) {
+      if (value !== undefined) {
+        trnxUpdates[key] = value;
+      }
+    }
+    const result =
+      await InventoryTransactionService.updateInventoryTransactionById(
+        inventoryTransactionId,
+        trnxUpdates,
+      );
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to update inventory transaction',
+      'UPDATE_INVENTORY_TRANSACTION',
+      'UPDATE_INVENTORY_TRANSACTION_BY_ID',
+      error,
+      { inventoryTransactionId: req.params.inventoryTransactionId },
+    );
+    return next(error);
+  }
+};
+
 const InventoryTransactionsController = {
   getInventoryTransactions,
   getInventoryTransactionById,
   createInventoryTransaction,
+  updateInventoryTransactionById,
 };
 
 module.exports = { InventoryTransactionsController };

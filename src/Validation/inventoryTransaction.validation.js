@@ -27,10 +27,25 @@ const createInventoryTransactionSchema = {
   }),
 };
 
+const updateInventoryTransactionByIdSchema = {
+  params: Joi.object({
+    inventoryTransactionId: Joi.number().integer().min(1).required(),
+  }),
+  body: Joi.object({
+    inventory_id: Joi.number().integer().positive(),
+    kitchen_id: Joi.number().integer().positive(),
+    type: Joi.string().valid('RESTOCK', 'USAGE', 'WASTE', 'TRANSFER'),
+    quantity: Joi.number().precision(2).positive(),
+    recorded_by: Joi.number().integer().positive(),
+    notes: Joi.string().max(1000).allow('', null),
+  }).min(1),
+};
+
 const InventoryTransactionsValidation = {
   getInventoryTransactionsSchema,
   getInventoryTransactionByIdSchema,
   createInventoryTransactionSchema,
+  updateInventoryTransactionByIdSchema,
 };
 
 module.exports = {

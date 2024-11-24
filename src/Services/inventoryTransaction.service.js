@@ -56,10 +56,34 @@ const createTransaction = async (queryOptions) => {
   }
 };
 
+const updateInventoryTransactionById = async (
+  inventoryTransactionId,
+  trnxUpdates,
+) => {
+  try {
+    const result =
+      await InventoryTransactionRepository.updateInventoryTransactionById(
+        inventoryTransactionId,
+        trnxUpdates,
+      );
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to update inventory transaction',
+      'UPDATE_INVENTORY_TRANSACTION',
+      'UPDATE_INVENTORY_TRANSACTION_BY_ID',
+      error,
+      { inventoryTransactionId },
+    );
+    throw error;
+  }
+};
+
 const InventoryTransactionService = {
   getInventoryTransactions,
   getInventoryTransactionById,
   createTransaction,
+  updateInventoryTransactionById,
 };
 
 module.exports = { InventoryTransactionService };

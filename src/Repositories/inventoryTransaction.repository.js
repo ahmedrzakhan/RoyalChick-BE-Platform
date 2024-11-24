@@ -127,10 +127,54 @@ const createTransaction = async (queryOptions) => {
   }
 };
 
+const updateInventoryTransactionById = async (
+  inventoryTransactionId,
+  trnxUpdates,
+) => {
+  try {
+    // Create updates array and values array from kitchenUpdates object
+    const updates = [];
+    const values = [];
+
+    Object.entries(trnxUpdates).forEach(([key, value]) => {
+      updates.push(`${key} = ?`);
+      values.push(value);
+    });
+
+    // First, perform the UPDATE
+    const updateQuery = `
+     UPDATE inventory_transactions
+     SET ${updates.join(', ')}
+     WHERE transaction_id = ?`;
+
+    values.push(inventoryTransactionId);
+    await pool.query(updateQuery, values);
+
+    // Then, fetch the updated record
+    const selectQuery = `
+     SELECT *
+     FROM inventory_transactions
+     WHERE transaction_id = ?`;
+
+    const [rows] = await pool.query(selectQuery, [inventoryTransactionId]);
+    return rows[0];
+  } catch (error) {
+    logger.error(
+      'Failed to update inventory transaction',
+      'UPDATE_INVENTORY_TRANSACTION',
+      'UPDATE_INVENTORY_TRANSACTION_BY_ID',
+      error,
+      { inventoryTransactionId },
+    );
+    throw error;
+  }
+};
+
 const InventoryTransactionRepository = {
   getInventoryTransactions,
   getInventoryTransactionById,
   createTransaction,
+  updateInventoryTransactionById,
 };
 
 module.exports = { InventoryTransactionRepository };
