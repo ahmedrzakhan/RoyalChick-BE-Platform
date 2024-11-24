@@ -3,11 +3,17 @@ const {
   CentralKitchenController,
 } = require('../Controllers/centralKitchen.controller');
 const { SupplierController } = require('../Controllers/supplier.controller');
+const {
+  InventoryTransactionsController,
+} = require('../Controllers/InventoryTransaction.controller');
 const validateRequest = require('../middleware/validateRequest');
 const {
   CentralKitchenValidation,
 } = require('../Validation/centralKitchen.validation');
 const { SupplierValidation } = require('../Validation/supplier.validation');
+const {
+  InventoryTransactionsValidation,
+} = require('../Validation/inventoryTransaction.validation');
 
 const router = express.Router();
 
@@ -57,6 +63,14 @@ router.post(
   '/supplier/:supplierId',
   validateRequest(SupplierValidation.updateSupplierByIdSchema),
   SupplierController.updateSupplierById,
+);
+
+router.get(
+  '/inventoryTransactions',
+  validateRequest(
+    InventoryTransactionsValidation.getInventoryTransactionsSchema,
+  ),
+  InventoryTransactionsController.getInventoryTransactions,
 );
 
 module.exports = router;
