@@ -12,10 +12,10 @@ const getSuppliers = async (queryOptions) => {
 
     const query = `
               SELECT
-                ck.*,
+                s.*,
                 (SELECT COUNT(*) FROM suppliers) as total_count
-              FROM suppliers ck
-              ORDER BY ck.created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
+              FROM suppliers s
+              ORDER BY s.created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
               LIMIT ${numericLimit} OFFSET ${numericOffset}
           `;
 
@@ -66,9 +66,9 @@ const getSupplierById = async (supplierId) => {
   try {
     const query = `
     SELECT
-        ck.*
-    FROM suppliers ck
-    WHERE ck.id = ${supplierId}
+        s.*
+    FROM suppliers s
+    WHERE s.id = ${supplierId}
 `;
 
     const [results] = await pool.query(query);

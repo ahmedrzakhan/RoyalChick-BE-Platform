@@ -12,10 +12,10 @@ const getInventoryTransactions = async (queryOptions) => {
 
     const query = `
                   SELECT
-                    ck.*,
+                    it.*,
                     (SELECT COUNT(*) FROM inventory_transactions) as total_count
-                  FROM inventory_transactions ck
-                  ORDER BY ck.created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
+                  FROM inventory_transactions it
+                  ORDER BY it.created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
                   LIMIT ${numericLimit} OFFSET ${numericOffset}
               `;
 
