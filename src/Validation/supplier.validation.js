@@ -14,9 +14,24 @@ const getSupplierByIdSchema = {
   }),
 };
 
+const createSupplierSchema = {
+  body: Joi.object({
+    name: Joi.string().min(2).max(100).required().trim(),
+    contact_person: Joi.string().max(100).allow(null, '').trim(),
+    email: Joi.string().email().max(100).required().trim(),
+    phone: Joi.string()
+      .pattern(/^[+]?[\d\s-]{8,15}$/)
+      .required(),
+    address: Joi.string().allow(null, '').trim(),
+    payment_terms: Joi.string().max(100).allow(null, '').trim(),
+    status: Joi.string().valid('ACTIVE', 'INACTIVE').default('ACTIVE'),
+  }),
+};
+
 const SupplierValidation = {
   getSuppliersSchema,
   getSupplierByIdSchema,
+  createSupplierSchema,
 };
 
 module.exports = {

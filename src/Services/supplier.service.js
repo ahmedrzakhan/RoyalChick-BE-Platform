@@ -32,9 +32,25 @@ const getSupplierById = async (supplierId) => {
   }
 };
 
+const createSupplier = async (queryOptions) => {
+  try {
+    const result = await SupplierRepository.createSupplier(queryOptions);
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to create supplier',
+      'CREATE_SUPPLIER',
+      'CREATE_SUPPLIER',
+      error,
+    );
+    throw error;
+  }
+};
+
 const SupplierService = {
   getSuppliers,
   getSupplierById,
+  createSupplier,
 };
 
 module.exports = { SupplierService };

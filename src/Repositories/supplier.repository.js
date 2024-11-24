@@ -84,9 +84,60 @@ const getSupplierById = async (supplierId) => {
   }
 };
 
+const createSupplier = async (queryOptions) => {
+  try {
+    const {
+      name,
+      contact_person,
+      email,
+      phone,
+      address,
+      payment_terms,
+      status,
+    } = queryOptions;
+    const query = `INSERT INTO suppliers (
+      name,
+      contact_person,
+      email,
+      phone,
+      address,
+      payment_terms,
+      status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    const values = [
+      name,
+      contact_person,
+      email,
+      phone,
+      address,
+      payment_terms,
+      status,
+    ];
+    const [result] = await pool.query(query, values);
+
+    // Fetch the newly created kitchen
+    const [createdSupplier] = await pool.query(
+      'SELECT * FROM suppliers WHERE id = ?',
+      [result.insertId],
+    );
+
+    return createdSupplier[0];
+  } catch (error) {
+    logger.error(
+      'Failed to create supplier',
+      'CREATE_SUPPLIER',
+      'CREATE_SUPPLIER',
+      error,
+    );
+    throw error;
+  }
+};
+
 const SupplierRepository = {
   getSuppliers,
   getSupplierById,
+  createSupplier,
 };
 
 module.exports = { SupplierRepository };
