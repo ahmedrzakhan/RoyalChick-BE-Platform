@@ -85,9 +85,52 @@ const getInventoryTransactionById = async (inventoryTransactionId) => {
     throw error;
   }
 };
+
+const createTransaction = async (queryOptions) => {
+  try {
+    const { inventory_id, kitchen_id, type, quantity, recorded_by, notes } =
+      queryOptions;
+    const query = `INSERT INTO inventory_transactions (
+      inventory_id,
+      kitchen_id,
+      type,
+      quantity,
+      recorded_by,
+      notes
+  ) VALUES (?, ?, ?, ?, ?, ?)`;
+
+    const values = [
+      inventory_id,
+      kitchen_id,
+      type,
+      quantity,
+      recorded_by,
+      notes,
+    ];
+    const [result] = await pool.query(query, values);
+
+    // Fetch the newly created kitchen
+    const [createdTrnx] = await pool.query(
+      'SELECT * FROM inventory_transactions WHERE transaction_id = ?',
+      [result.insertId],
+    );
+
+    return createdTrnx[0];
+  } catch (error) {
+    logger.error(
+      'Failed to create inventory transaction',
+      'CREATE_INVENTORY_TRANSACTION',
+      'CREATE_INVENTORY_TRANSACTION',
+      error,
+    );
+    throw error;
+  }
+};
+
 const InventoryTransactionRepository = {
   getInventoryTransactions,
   getInventoryTransactionById,
+  createTransaction,
 };
 
 module.exports = { InventoryTransactionRepository };

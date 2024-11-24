@@ -48,9 +48,37 @@ const getInventoryTransactionById = async (req, res, next) => {
   }
 };
 
+const createInventoryTransaction = async (req, res, next) => {
+  try {
+    const { inventory_id, kitchen_id, type, quantity, recorded_by, notes } =
+      req.body;
+    const queryOptions = {
+      inventory_id,
+      kitchen_id,
+      type,
+      quantity,
+      recorded_by,
+      notes,
+    };
+    const result =
+      await InventoryTransactionService.createTransaction(queryOptions);
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to create inventory transaction',
+      'CREATE_INVENTORY_TRANSACTION',
+      'CREATE_INVENTORY_TRANSACTION',
+      error,
+      { supplierId: req.params.supplierId },
+    );
+    return next(error);
+  }
+};
+
 const InventoryTransactionsController = {
   getInventoryTransactions,
   getInventoryTransactionById,
+  createInventoryTransaction,
 };
 
 module.exports = { InventoryTransactionsController };

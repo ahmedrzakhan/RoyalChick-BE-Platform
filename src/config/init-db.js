@@ -225,7 +225,6 @@ async function initializeDatabase() {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (inventory_id) REFERENCES inventory(id),
     FOREIGN KEY (kitchen_id) REFERENCES central_kitchen(kitchen_id),
-    INDEX restaurant_index (restaurant_id),
     FOREIGN KEY (recorded_by) REFERENCES employees(id),
     INDEX transaction_date_index (transaction_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
