@@ -217,7 +217,6 @@ async function initializeDatabase() {
     id INT PRIMARY KEY AUTO_INCREMENT,
     inventory_id INT NOT NULL,
     kitchen_id INT NOT NULL,
-    restaurant_id INT NOT NULL,
     type ENUM('RESTOCK', 'USAGE', 'WASTE', 'TRANSFER') NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
