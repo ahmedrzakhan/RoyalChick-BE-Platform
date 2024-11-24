@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
 });
 
 // 4. API Routes
-// app.use('/api/v1', routerV1);
+app.use('/api/v1', routerV1);
 
 // 5. 404 Handler (after routes but before error handlers)
 // app.use((req, res) => {
