@@ -17,8 +17,24 @@ const getSuppliers = async (queryOptions) => {
   }
 };
 
+const getSupplierById = async (supplierId) => {
+  try {
+    const result = await SupplierRepository.getSupplierById(supplierId);
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch supplier',
+      'GET_SUPPLIER',
+      'GET_SUPPLIER_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const SupplierService = {
   getSuppliers,
+  getSupplierById,
 };
 
 module.exports = { SupplierService };

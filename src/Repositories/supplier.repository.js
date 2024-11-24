@@ -62,8 +62,31 @@ const getSuppliers = async (queryOptions) => {
   }
 };
 
+const getSupplierById = async (supplierId) => {
+  try {
+    const query = `
+    SELECT
+        ck.*
+    FROM suppliers ck
+    WHERE ck.id = ${supplierId}
+`;
+
+    const [results] = await pool.query(query);
+    return results;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch supplier',
+      'GET_SUPPLIER',
+      'GET_SUPPLIER_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const SupplierRepository = {
   getSuppliers,
+  getSupplierById,
 };
 
 module.exports = { SupplierRepository };

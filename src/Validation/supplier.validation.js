@@ -8,8 +8,15 @@ const getSuppliersSchema = {
   }),
 };
 
+const getSupplierByIdSchema = {
+  params: Joi.object({
+    supplierId: Joi.number().integer().min(1).required(),
+  }),
+};
+
 const SupplierValidation = {
   getSuppliersSchema,
+  getSupplierByIdSchema,
 };
 
 module.exports = {
