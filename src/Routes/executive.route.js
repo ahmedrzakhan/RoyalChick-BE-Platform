@@ -41,4 +41,10 @@ router.get(
   SupplierController.getSuppliers,
 );
 
+router.get(
+  '/supplier/:supplierId',
+  validateRequest(SupplierValidation.getSupplierByIdSchema),
+  SupplierController.getSupplierById,
+);
+
 module.exports = router;
