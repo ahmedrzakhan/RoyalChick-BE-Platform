@@ -8,8 +8,15 @@ const getCentralKitchensSchema = {
   }),
 };
 
+const getCentralKitchenByIdSchema = {
+  params: Joi.object({
+    kitchenId: Joi.number().integer().min(1),
+  }),
+};
+
 const CentralKitchenValidation = {
   getCentralKitchensSchema,
+  getCentralKitchenByIdSchema,
 };
 
 module.exports = {

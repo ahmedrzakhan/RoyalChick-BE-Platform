@@ -20,8 +20,25 @@ const getCentralKitchens = async (queryOptions) => {
   }
 };
 
+const getCentralKitchenById = async (kitchenId) => {
+  try {
+    const result =
+      await CentralKitchenRepository.getCentralKitchenById(kitchenId);
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch central kitchen',
+      'GET_CENTRAL_KITCHEN',
+      'GET_CENTRAL_KITCHEN_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenService = {
   getCentralKitchens,
+  getCentralKitchenById,
 };
 
 module.exports = { CentralKitchenService };

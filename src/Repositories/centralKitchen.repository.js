@@ -10,7 +10,6 @@ const getCentralKitchens = async (queryOptions) => {
     const numericLimit = Number(limit);
     const numericOffset = Number(offset);
 
-    // Using direct values for LIMIT/OFFSET
     const query = `
             SELECT
               ck.*,
@@ -20,7 +19,6 @@ const getCentralKitchens = async (queryOptions) => {
             LIMIT ${numericLimit} OFFSET ${numericOffset}
         `;
 
-    // Using query instead of execute since we're using direct values
     const [results] = await pool.query(query);
 
     // If no results, return empty with count 0
@@ -64,8 +62,31 @@ const getCentralKitchens = async (queryOptions) => {
   }
 };
 
+const getCentralKitchenById = async (kitchenId) => {
+  try {
+    const query = `
+    SELECT
+        ck.*
+    FROM central_kitchen ck
+    WHERE ck.kitchen_id = ${kitchenId}
+`;
+
+    const [results] = await pool.query(query);
+    return results;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch central kitchen',
+      'GET_CENTRAL_KITCHEN',
+      'GET_CENTRAL_KITCHEN_BY_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenRepository = {
   getCentralKitchens,
+  getCentralKitchenById,
 };
 
 module.exports = { CentralKitchenRepository };

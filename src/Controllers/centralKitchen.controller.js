@@ -25,8 +25,27 @@ const getCentralKitchens = async (req, res, next) => {
   }
 };
 
+const getCentralKitchenById = async (req, res, next) => {
+  try {
+    const { kitchenId } = req.params;
+
+    const result = await CentralKitchenService.getCentralKitchenById(kitchenId);
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to fetch central kitchen',
+      'GET_CENTRAL_KITCHEN',
+      'GET_CENTRAL_KITCHEN_BY_ID',
+      error,
+      { kitchenId },
+    );
+    return next(error);
+  }
+};
+
 const CentralKitchenController = {
   getCentralKitchens,
+  getCentralKitchenById,
 };
 
 module.exports = { CentralKitchenController };
