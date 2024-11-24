@@ -84,9 +84,45 @@ const getCentralKitchenById = async (kitchenId) => {
   }
 };
 
+const createCentralKitchen = async (queryOptions) => {
+  try {
+    const { name, address, city, postcode, phone, manager_id, status } =
+      queryOptions;
+    const query = `INSERT INTO central_kitchen (
+      name,
+      address,
+      city,
+      postcode,
+      phone,
+      manager_id,
+      status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    const values = [name, address, city, postcode, phone, manager_id, status];
+    const [result] = await pool.query(query, values);
+
+    // Fetch the newly created kitchen
+    const [createdKitchen] = await pool.query(
+      'SELECT * FROM central_kitchen WHERE kitchen_id = ?',
+      [result.insertId],
+    );
+
+    return createdKitchen[0];
+  } catch (error) {
+    logger.error(
+      'Failed to create central kitchen',
+      'CREATE_CENTRAL_KITCHEN',
+      'CREATE_CENTRAL_KITCHEN',
+      error,
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenRepository = {
   getCentralKitchens,
   getCentralKitchenById,
+  createCentralKitchen,
 };
 
 module.exports = { CentralKitchenRepository };

@@ -15,6 +15,6 @@ router.use(
   kitenStaffRouter,
 );
 // router.use('/manager', authenticateManager, mangerRouter);
-// router.use('/executive', authenticateExecutive, executiveRouter);
+router.use('/executive', Autheticator.authenticateExecutive, executiveRouter);
 
 module.exports = router;

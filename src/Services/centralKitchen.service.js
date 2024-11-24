@@ -36,9 +36,26 @@ const getCentralKitchenById = async (kitchenId) => {
   }
 };
 
+const createCentralKitchen = async (queryOptions) => {
+  try {
+    const result =
+      await CentralKitchenRepository.createCentralKitchen(queryOptions);
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to create central kitchen',
+      'CREATE_CENTRAL_KITCHEN',
+      'CREATE_CENTRAL_KITCHEN',
+      error,
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenService = {
   getCentralKitchens,
   getCentralKitchenById,
+  createCentralKitchen,
 };
 
 module.exports = { CentralKitchenService };

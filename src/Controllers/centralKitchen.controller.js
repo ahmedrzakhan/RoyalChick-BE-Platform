@@ -43,9 +43,38 @@ const getCentralKitchenById = async (req, res, next) => {
   }
 };
 
+const createCentralKitchenSchema = async (req, res, next) => {
+  try {
+    const { name, address, city, postcode, phone, manager_id, status } =
+      req.body;
+    const queryOptions = {
+      name,
+      address,
+      city,
+      postcode,
+      phone,
+      manager_id,
+      status,
+    };
+    const result =
+      await CentralKitchenService.createCentralKitchen(queryOptions);
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to create central kitchen',
+      'CREATE_CENTRAL_KITCHEN',
+      'CREATE_CENTRAL_KITCHEN',
+      error,
+      { employeeId: req.employee?.id },
+    );
+    return next(error);
+  }
+};
+
 const CentralKitchenController = {
   getCentralKitchens,
   getCentralKitchenById,
+  createCentralKitchenSchema,
 };
 
 module.exports = { CentralKitchenController };
