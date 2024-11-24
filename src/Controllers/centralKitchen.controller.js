@@ -43,7 +43,7 @@ const getCentralKitchenById = async (req, res, next) => {
   }
 };
 
-const createCentralKitchenSchema = async (req, res, next) => {
+const createCentralKitchen = async (req, res, next) => {
   try {
     const { name, address, city, postcode, phone, manager_id, status } =
       req.body;
@@ -71,10 +71,38 @@ const createCentralKitchenSchema = async (req, res, next) => {
   }
 };
 
+const updateCentralKitchenById = async (req, res, next) => {
+  try {
+    const { kitchenId } = req.params;
+    const kitchenData = req.body;
+    const kitchenUpdates = {};
+    for (const [key, value] of Object.entries(kitchenData)) {
+      if (value !== undefined) {
+        kitchenUpdates[key] = value;
+      }
+    }
+    const result = await CentralKitchenService.updateCentralKitchen(
+      kitchenId,
+      kitchenUpdates,
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to update central kitchen',
+      'UPDATE_CENTRAL_KITCHEN',
+      'UPDATE_CENTRAL_KITCHEN_BY_ID',
+      error,
+      { kitchenId: req.params.kitchenId },
+    );
+    return next(error);
+  }
+};
+
 const CentralKitchenController = {
   getCentralKitchens,
   getCentralKitchenById,
-  createCentralKitchenSchema,
+  createCentralKitchen,
+  updateCentralKitchenById,
 };
 
 module.exports = { CentralKitchenController };

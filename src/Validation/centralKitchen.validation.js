@@ -28,10 +28,28 @@ const createCentralKitchenSchema = {
   }),
 };
 
+const updateCentralKitchenByIdSchema = {
+  params: Joi.object({
+    kitchenId: Joi.number().integer().min(1).required(),
+  }),
+  body: Joi.object({
+    name: Joi.string().max(100).trim(),
+    address: Joi.string().max(255).trim(),
+    city: Joi.string().max(100).trim(),
+    postcode: Joi.string().max(20).trim(),
+    phone: Joi.string()
+      .max(15)
+      .pattern(/^\d{3}-\d{3}-\d{4}$/),
+    manager_id: Joi.number().integer().min(1),
+    status: Joi.string().valid('ACTIVE', 'INACTIVE', 'RENOVATING'),
+  }).min(1),
+};
+
 const CentralKitchenValidation = {
   getCentralKitchensSchema,
   getCentralKitchenByIdSchema,
   createCentralKitchenSchema,
+  updateCentralKitchenByIdSchema,
 };
 
 module.exports = {

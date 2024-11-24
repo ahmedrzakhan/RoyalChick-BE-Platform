@@ -52,10 +52,30 @@ const createCentralKitchen = async (queryOptions) => {
   }
 };
 
+const updateCentralKitchen = async (kitchenId, kitchenUpdates) => {
+  try {
+    const result = await CentralKitchenRepository.updateCentralKitchen(
+      kitchenId,
+      kitchenUpdates,
+    );
+    return result;
+  } catch (error) {
+    logger.error(
+      'Failed to update central kitchen',
+      'UPDATE_CENTRAL_KITCHEN',
+      'UPDATE_CENTRAL_KITCHEN_BY_ID',
+      error,
+      { kitchenId },
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenService = {
   getCentralKitchens,
   getCentralKitchenById,
   createCentralKitchen,
+  updateCentralKitchen,
 };
 
 module.exports = { CentralKitchenService };

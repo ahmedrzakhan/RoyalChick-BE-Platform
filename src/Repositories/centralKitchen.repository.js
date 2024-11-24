@@ -119,10 +119,51 @@ const createCentralKitchen = async (queryOptions) => {
   }
 };
 
+const updateCentralKitchen = async (kitchenId, kitchenUpdates) => {
+  try {
+    // Create updates array and values array from kitchenUpdates object
+    const updates = [];
+    const values = [];
+
+    Object.entries(kitchenUpdates).forEach(([key, value]) => {
+      updates.push(`${key} = ?`);
+      values.push(value);
+    });
+
+    // First, perform the UPDATE
+    const updateQuery = `
+     UPDATE central_kitchen
+     SET ${updates.join(', ')}
+     WHERE kitchen_id = ?`;
+
+    values.push(kitchenId);
+    await pool.query(updateQuery, values);
+
+    // Then, fetch the updated record
+    const selectQuery = `
+     SELECT *
+     FROM central_kitchen
+     WHERE kitchen_id = ?`;
+
+    const [rows] = await pool.query(selectQuery, [kitchenId]);
+    return rows[0];
+  } catch (error) {
+    logger.error(
+      'Failed to update central kitchen',
+      'UPDATE_CENTRAL_KITCHEN',
+      'UPDATE_CENTRAL_KITCHEN_BY_ID',
+      error,
+      { kitchenId },
+    );
+    throw error;
+  }
+};
+
 const CentralKitchenRepository = {
   getCentralKitchens,
   getCentralKitchenById,
   createCentralKitchen,
+  updateCentralKitchen,
 };
 
 module.exports = { CentralKitchenRepository };

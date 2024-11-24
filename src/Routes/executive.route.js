@@ -12,7 +12,13 @@ const router = express.Router();
 router.post(
   '/kitchen',
   validateRequest(CentralKitchenValidation.createCentralKitchenSchema),
-  CentralKitchenController.createCentralKitchenSchema,
+  CentralKitchenController.createCentralKitchen,
+);
+
+router.post(
+  '/kitchen/:kitchenId',
+  validateRequest(CentralKitchenValidation.updateCentralKitchenByIdSchema),
+  CentralKitchenController.updateCentralKitchenById,
 );
 
 module.exports = router;
