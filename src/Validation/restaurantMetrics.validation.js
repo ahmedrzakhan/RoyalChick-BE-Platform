@@ -8,8 +8,15 @@ const getRestaurantMetricsSchema = {
   }),
 };
 
+const getRestaurantMetricsByRestoIdSchema = {
+  params: Joi.object({
+    restaurantId: Joi.number().integer().min(1).required(),
+  }),
+};
+
 const RestaurantMetricsValidation = {
   getRestaurantMetricsSchema,
+  getRestaurantMetricsByRestoIdSchema,
 };
 
 module.exports = {
