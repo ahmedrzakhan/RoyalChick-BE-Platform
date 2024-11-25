@@ -11,23 +11,24 @@ const getUser = async (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const user = await UserService.saveUser(req.body);
-    res.send(user);
+    res.send({user: "User created successfully"});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   try {
-    const user = await UserService.getUserByEmail(req.body.email);
-    if (!user) {
-      return res.status(404).send('User not found');
+    console.log(req.body);
+    const user = await UserService.getFullUser(req.body.email);
+    if (!user[0][0]) {
+      throw new Error('User not found');
     }
     if (user[0][0].password != req.body.password) {
-      return res.status(401).send('Invalid credentials');
+      throw new Error('Invalid credentials');
     }
     //generate token
-    const token = generateAccessToken({ email: user[0][0].email });
+    const token = generateAccessToken({ id: user[0][0].id });
     const response = { token: token };
     res.send(response);
   } catch (error) {

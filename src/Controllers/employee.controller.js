@@ -1,4 +1,5 @@
 const { EmployeeService } = require('../Services/employee.service');
+const {OrderService} = require('../Services/order.service')
 const {generateAccessToken} = require('../Util/auth.util');
 const createEmployee = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ const generateEmployeeToken = async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         //generate token
-        const token = generateAccessToken({ email: employee[0].email });
+        const token = generateAccessToken({ id: employee[0].id });
         const response = { token: token };
         res.send(response);
     } catch (error) {
@@ -50,6 +51,26 @@ const getSignedInEmployee = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+const getCompletedOrdersInEmployeeRestaurant = async (req, res) => {
+    try {
+        const restaurant_id = req.user.restaurant_id;
+        const orders = await OrderService.getComletedOrdersInARestaurant(restaurant_id);
+        res.send(orders);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const getEmployeeInAManagerRestaurant = async (req, res) => {
+    try {
+        const restaurant_id = req.user.restaurant_id;
+        const employees = await EmployeeService.getEmployeeInARestaurant(restaurant_id);
+        res.send(employees);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 const createStaffOrder = async (req, res) => {};
 
 const staffOrderStatus = async (req, res) => {};
@@ -58,6 +79,6 @@ const staffAttendance = async (req, res) => {};
 
 const staffTaks = async (req, res) => {};
 
-const EmployeeController = { createEmployee, generateEmployeeToken,updateEmployee, getSignedInEmployee };
+const EmployeeController = { createEmployee, generateEmployeeToken,updateEmployee, getSignedInEmployee, getCompletedOrdersInEmployeeRestaurant, getEmployeeInAManagerRestaurant };
 
 module.exports = { EmployeeController };

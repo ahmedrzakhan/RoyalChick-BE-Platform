@@ -111,7 +111,7 @@ async function initializeDatabase() {
       restaurant_id int NOT NULL,
       status ENUM('PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED') NOT NULL,
       total_amount DOUBLE NOT NULL DEFAULT 0,
-      payment_status VARCHAR(12),
+      payment_status ENUM('PENDING', 'NOT_PAID', 'PAID') NOT NULL DEFAULT 'PAID',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       FOREIGN KEY (customer_id) REFERENCES users(id),
@@ -246,6 +246,11 @@ async function initializeDatabase() {
     INDEX shift_index (shift_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 `);
+//create view for completed orders
+await connection.execute(`CREATE OR REPLACE VIEW completed_orders 
+  AS
+  SELECT id, payment_status, restaurant_id 
+  from orders where status='COMPLETED';`);
 
     console.log('Database initialized successfully');
     return true;

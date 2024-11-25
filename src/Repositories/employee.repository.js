@@ -22,6 +22,18 @@ const getEmployeeByEmail = async (email) => {
     return result[0];
 }
 
+const getEmployeeById = async (id) => {
+    const query = `SELECT * FROM employees WHERE id = ?;`;
+    const result = await pool.execute(query, [id]);
+    return result[0];
+}
+
+const getEmployeeInaRestaurant = async (restaurant_id) => {
+    const query = `SELECT id, name, restaurant_id, position, salary, status,email FROM employees WHERE restaurant_id = ?;`;
+    const result = await pool.execute(query, [restaurant_id]);
+    return result[0];
+}
+
 const updateEmployee = async (email, employee) => {
     const query = `UPDATE employees SET restaurant_id = ?, position = ?, salary = ?, status = ? WHERE email = ?;`;
     await pool.execute(query, [
@@ -34,6 +46,6 @@ const updateEmployee = async (email, employee) => {
     return employee;
 }
 
-const EmployeeRepository = { createEmployee, getEmployeeByEmail, updateEmployee };
+const EmployeeRepository = { createEmployee, getEmployeeByEmail, updateEmployee, getEmployeeById, getEmployeeInaRestaurant };
 
-module.exports = { EmployeeRepository, getEmployeeByEmail };
+module.exports = { EmployeeRepository };

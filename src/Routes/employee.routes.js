@@ -4,9 +4,12 @@ const { verifyTokenForEmployee, verifyUserTypeIsManager } = require('../middlewa
 const router = express.Router();
 
 //create a new employee
-router.post('/create', EmployeeController.createEmployee);
+router.post('/create',verifyTokenForEmployee, verifyUserTypeIsManager, EmployeeController.createEmployee);
 router.post('/login', EmployeeController.generateEmployeeToken);
 router.get('/get',verifyTokenForEmployee , EmployeeController.getSignedInEmployee);
+router.get('/get/orders',verifyTokenForEmployee , EmployeeController.getCompletedOrdersInEmployeeRestaurant);
+//get all employees in a manager's restaurant
+router.get('/get/employees',verifyTokenForEmployee, verifyUserTypeIsManager, EmployeeController.getEmployeeInAManagerRestaurant);
 //modify employee details
-router.patch('/update/:email', verifyTokenForEmployee, verifyUserTypeIsManager ,EmployeeController.updateEmployee);
+router.patch('/update/:id', verifyTokenForEmployee, verifyUserTypeIsManager ,EmployeeController.updateEmployee);
 module.exports = router;

@@ -1,7 +1,6 @@
 const { OrderRepository } = require('../Repositories/order.repository');
 
 const saveOrder = async (order_item, user_id) => {
-  console.log('Order value');
   return await OrderRepository.createOrder(order_item, user_id);
 };
 
@@ -9,7 +8,10 @@ const saveOrder = async (order_item, user_id) => {
 const getOrdersByCustomerId = async (customer_id) => {
   return await OrderRepository.getOrdersByCustomerId(customer_id);
 };
-
+//get all completed orders in a restaurant
+const getComletedOrdersInARestaurant = async (resturnt_id) => {
+    return await OrderRepository.getComletedOrdersInARestaurant(resturnt_id);
+}
 const saveOrderItem = async (order_item) => {
   return await OrderRepository.createOrderItem(order_item);
 };
@@ -45,6 +47,7 @@ const OrderService = {
   getOrderById,
   getOrderItemsByOrderId,
   editOrder,
+  getComletedOrdersInARestaurant
 };
 
 module.exports = { OrderService };

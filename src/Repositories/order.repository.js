@@ -9,6 +9,7 @@ const createOrder = async (order, customer_id) => {
       order.total_amount,
       order.payment_status,
     ]);
+    console.log("Customer Id:" + customer_id);
     return {...order, id: result[0].insertId};
   } catch (error) {
     console.log(error);
@@ -76,13 +77,24 @@ const editOrder = async (order, order_id) => {
   }
 };
 
+//get completed orders from completed orders view
+const getComletedOrdersInARestaurant = async (resturnt_id) => {
+    try {
+        const query = `SELECT * FROM completed_orders where restaurant_id = ?;`;
+        const result = await pool.execute(query, [resturnt_id]);
+        return result[0];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const OrderRepository = {
   createOrder,
   createOrderItem,
   getOrdersByCustomerId,
   trackOrder,
   getOrderItemsByOrderId,
-  editOrder,
+  editOrder,getComletedOrdersInARestaurant
 };
 
 module.exports = { OrderRepository };

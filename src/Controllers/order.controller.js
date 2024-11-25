@@ -49,12 +49,24 @@ const editOrder = async (req, res) => {
   }
 };
 
+const getComletedOrdersInARestaurant = async (req, res) => {
+  try {
+    const orders = await OrderService.getComletedOrdersInARestaurant(
+      req.params.restaurant_id,
+    );
+    res.send(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 const OrderController = {
   CreateOrder,
   createOrderItem,
   getAllOrdersByCustomer,
   trackOrder,
   editOrder,
+  getComletedOrdersInARestaurant
 };
 
 module.exports = { OrderController };
