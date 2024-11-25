@@ -1,5 +1,11 @@
 const { pool } = require('../config/database');
 
+const getMenuItemById = async (id) => {
+  const query = `SELECT * FROM menu_items WHERE id = ?;`;
+  const result = await pool.execute(query, [id]);
+  return result[0];
+}
+
 const saveMenu = async (menu) => {
   // Save user to database
   try {
@@ -27,6 +33,6 @@ const getMenu = async () => {
   return menus[0];
 };
 
-const MenuRepository = { saveMenu, getMenu };
+const MenuRepository = { saveMenu, getMenu ,getMenuItemById};
 
 module.exports = { MenuRepository };

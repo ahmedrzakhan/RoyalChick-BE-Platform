@@ -1,5 +1,5 @@
 const { OrderRepository } = require('../Repositories/order.repository');
-
+const {MenuRepository} = require('../Repositories/menu.repository');
 const saveOrder = async (order_item, user_id) => {
   return await OrderRepository.createOrder(order_item, user_id);
 };
@@ -21,7 +21,14 @@ const getOrderById = async (order_id) => {
 };
 
 const getOrderItemsByOrderId = async (order_id) => {
-  return await OrderRepository.getOrderItemsByOrderId(order_id);
+  const order_items =  await OrderRepository.getOrderItemsByOrderId(order_id);
+  //popUplate order items with food items
+  for (let index = 0; index < order_items.length; index++) {
+    const element = order_items[index];
+    element.food_item = await MenuRepository.getMenuItemById(element.item_id);
+    order_items[index] = element;
+  }
+  return order_items;
 };
 
 const editOrder = async (order, order_id) => {

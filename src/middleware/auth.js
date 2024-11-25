@@ -38,7 +38,10 @@ const verifyTokenForEmployee = async (req, res, next) => {
 //In addition, manager and exexcutive can perform staff actions
 const verifyUserTypeIsStaff = async (req, res, next) => {
   try {
-    if (req.user.position !== 'STAFF' && req.user.position!=='MANAGER' && req.user.position!='EXECUTIVE') return res.status(403).send('Forbidden');
+    if (req.user.position !== 'STAFF' && req.user.position!=='MANAGER' && req.user.position!='EXECUTIVE')         if (req.user.position !== 'EXECUTIVE') 
+        {
+        throw new Error('Forbidden');
+        }
     next();
   } catch (error) {
     next(error);
@@ -47,8 +50,11 @@ const verifyUserTypeIsStaff = async (req, res, next) => {
 
 const verifyUserTypeIsManager = async (req, res, next) => {
     try {
-        if (req.user.position !== 'MANAGER'&&req.user.position!=='EXECUTIVE') return res.status(403).send('Forbidden');
-        next();
+        if (req.user.position !== 'MANAGER'&&req.user.position!=='EXECUTIVE')         if (req.user.position !== 'EXECUTIVE') 
+            {
+            throw new Error('Forbidden');
+            }
+            next()
     } catch (error) {
         next(error);
     }
@@ -56,7 +62,11 @@ const verifyUserTypeIsManager = async (req, res, next) => {
 
 const verifyUserTypeIsExecutive = async (req, res, next) => {
     try {
-        if (req.user.position !== 'EXECUTIVE') return res.status(403).send('Forbidden');
+        if (req.user.position !== 'EXECUTIVE') 
+            {
+            throw new Error('Forbidden');
+            }
+
         next();
     } catch (error) {
         next(error);

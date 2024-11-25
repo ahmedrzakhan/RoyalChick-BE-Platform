@@ -7,6 +7,10 @@ const saveMenu = async (menu) => {
 const getAllMenu = async () => {
   return await MenuRepository.getMenu();
 };
-const MenuService = { saveMenu, getAllMenu };
+
+const getMenuById = async (id) => {
+  return await MenuRepository.getMenuItemById(id);
+}
+const MenuService = { saveMenu, getAllMenu, getAllMenu };
 
 module.exports = { MenuService };
