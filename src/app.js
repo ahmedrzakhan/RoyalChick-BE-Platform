@@ -15,6 +15,11 @@ const { routerV1 } = require('./Routes/index');
 
 const { Interceptor } = require('./middleware/responseInterceptor');
 const { ErrorHandler } = require('./middleware/errorHandler');
+
+const {
+  calculateDailyRestaurantsMetricsInBatches,
+} = require('./jobs/calculateDailyRestaurantMetricsJob');
+
 const app = express();
 
 // Create a Bunyan logger
@@ -143,6 +148,8 @@ async function startServer() {
   try {
     await testConnection();
     await initializeDatabase();
+
+    // await calculateDailyRestaurantsMetricsInBatches();
 
     app.listen(CONFIG.PORT, () => {
       log.info(`Server is running on port ${CONFIG.PORT}`);
