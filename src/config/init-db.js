@@ -135,21 +135,6 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
       `);
 
-    // Analytics tracking for executive insights
-    await connection.execute(`CREATE TABLE IF NOT EXISTS revenue_analytics (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      restaurant_id INT NOT NULL,
-      date DATE NOT NULL,
-      daily_revenue DECIMAL(10,2),
-      total_orders INT,
-      average_order_value DECIMAL(10,2),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
-      INDEX date_index (date),
-      INDEX restaurant_date_index (restaurant_id, date)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-  `);
-
     // Staff scheduling
     await connection.execute(`CREATE TABLE IF NOT EXISTS staff_schedules (
       id INT PRIMARY KEY AUTO_INCREMENT,
@@ -186,6 +171,8 @@ async function initializeDatabase() {
     await connection.execute(`CREATE TABLE IF NOT EXISTS restaurant_metrics (
     id INT PRIMARY KEY AUTO_INCREMENT,
     restaurant_id INT NOT NULL,
+    daily_revenue DECIMAL(10,2),
+    average_order_value DECIMAL(10,2),
     date DATE NOT NULL,
     total_orders_completed INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
