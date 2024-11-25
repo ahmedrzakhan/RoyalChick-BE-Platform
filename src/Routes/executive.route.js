@@ -6,6 +6,11 @@ const { SupplierController } = require('../Controllers/supplier.controller');
 const {
   InventoryTransactionsController,
 } = require('../Controllers/InventoryTransaction.controller');
+
+const {
+  RestaurantMetricsController,
+} = require('../Controllers/restaurantMetrics.controller');
+
 const validateRequest = require('../middleware/validateRequest');
 const {
   CentralKitchenValidation,
@@ -14,6 +19,9 @@ const { SupplierValidation } = require('../Validation/supplier.validation');
 const {
   InventoryTransactionsValidation,
 } = require('../Validation/inventoryTransaction.validation');
+const {
+  RestaurantMetricsValidation,
+} = require('../Validation/restaurantMetrics.validation');
 
 const router = express.Router();
 
@@ -95,6 +103,12 @@ router.post(
     InventoryTransactionsValidation.updateInventoryTransactionByIdSchema,
   ),
   InventoryTransactionsController.updateInventoryTransactionById,
+);
+
+router.get(
+  '/restaurantMetrics',
+  validateRequest(RestaurantMetricsValidation.getRestaurantMetricsSchema),
+  RestaurantMetricsController.getRestaurantMetrics,
 );
 
 module.exports = router;
