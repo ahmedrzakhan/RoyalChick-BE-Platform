@@ -131,6 +131,8 @@ app.use('/api/menu', require('./Routes/menu.routes'));
 app.use('/api/orders', require('./Routes/order.routes'));
 app.use('/api/restaurant', require('./Routes/restaurant.routes'));
 app.use('/api/employee', require('./Routes/employee.routes'));
+app.use('/api/shift', require('./Routes/shift.routes'));
+app.use('/api/attendance', require('./Routes/attendance.routes'));
 app.use(ErrorHandler.defaultErrorHandler);
 
 // Health check endpoint
