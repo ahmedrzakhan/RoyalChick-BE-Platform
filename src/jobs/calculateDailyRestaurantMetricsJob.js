@@ -34,30 +34,37 @@ const calculateDailyRestaurantsMetricsInBatches = async (batchSize = 100) => {
     await Promise.all(
       restaurants.map(async (restaurant) => {
         try {
+          // Modified query to include revenue calculations
           const [orders] = await pool.query(
             `
-                SELECT COUNT(*) as total_orders
-                FROM orders
-                WHERE restaurant_id = ?
-                AND DATE(created_at) = DATE(NOW())
-                AND status = 'COMPLETED'
-              `,
+            SELECT
+              COUNT(*) as total_orders,
+              SUM(total_amount) as daily_revenue,
+              AVG(total_amount) as average_order_value
+            FROM orders
+            WHERE restaurant_id = ?
+            AND DATE(created_at) = DATE(NOW())
+            AND status = 'COMPLETED'
+            `,
             [restaurant.id],
           );
 
           const totalOrders = orders[0].total_orders;
+          const dailyRevenue = orders[0].daily_revenue || 0;
+          const averageOrderValue = orders[0].average_order_value || 0;
 
+          // Modified insert query to include new fields
           await pool.query(
             `
             INSERT INTO restaurant_metrics
-            (restaurant_id, date, total_orders_completed)
-            VALUES (?, CURDATE(), ?)
-          `,
-            [restaurant.id, totalOrders],
+            (restaurant_id, date, total_orders_completed, daily_revenue, average_order_value)
+            VALUES (?, CURDATE(), ?, ?, ?)
+            `,
+            [restaurant.id, totalOrders, dailyRevenue, averageOrderValue],
           );
 
           console.log(
-            `Metrics added for restaurant "${restaurant.name}" (ID: ${restaurant.id}): ${totalOrders} orders`,
+            `Metrics added for restaurant "${restaurant.name}" (ID: ${restaurant.id}): ${totalOrders} orders, Revenue: $${dailyRevenue}, Avg Order: $${averageOrderValue}`,
           );
         } catch (error) {
           errorCount++;

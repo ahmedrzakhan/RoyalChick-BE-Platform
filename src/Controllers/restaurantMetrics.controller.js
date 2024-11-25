@@ -27,8 +27,29 @@ const getRestaurantMetrics = async (req, res, next) => {
   }
 };
 
+const getRestaurantMetricsByRestoId = async (req, res, next) => {
+  try {
+    const { restaurantId } = req.params;
+    const result =
+      await RestaurantMetricsService.getRestaurantMetricsByRestoId(
+        restaurantId,
+      );
+    return res.status(200).json(result);
+  } catch (error) {
+    logger.error(
+      'Failed to fetch restaurant metric by resto id',
+      'GET_RESTAURANT_METRICS',
+      'GET_RESTAURANT_METRICS_BY_RESTO_ID',
+      error,
+      { employeeId: req.employee?.id, restaurantId: req.params.restaurantId },
+    );
+    return next(error);
+  }
+};
+
 const RestaurantMetricsController = {
   getRestaurantMetrics,
+  getRestaurantMetricsByRestoId,
 };
 
 module.exports = { RestaurantMetricsController };

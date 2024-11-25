@@ -111,4 +111,12 @@ router.get(
   RestaurantMetricsController.getRestaurantMetrics,
 );
 
+router.get(
+  '/restaurantMetrics/:restaurantId',
+  validateRequest(
+    RestaurantMetricsValidation.getRestaurantMetricsByRestoIdSchema,
+  ),
+  RestaurantMetricsController.getRestaurantMetricsByRestoId,
+);
+
 module.exports = router;

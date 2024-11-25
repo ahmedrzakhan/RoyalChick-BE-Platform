@@ -64,8 +64,31 @@ const getRestaurantMetrics = async (queryOptions) => {
   }
 };
 
+const getRestaurantMetricsByRestoId = async (restaurantId) => {
+  try {
+    const query = `
+    SELECT
+        rm.*
+    FROM restaurant_metrics rm
+    WHERE rm.restaurant_id = ?
+`;
+
+    const [results] = await pool.query(query, [restaurantId]);
+    return results;
+  } catch (error) {
+    logger.error(
+      'Failed to fetch restaurant metric by resto id',
+      'GET_RESTAURANT_METRICS',
+      'GET_RESTAURANT_METRICS_BY_RESTO_ID',
+      error,
+    );
+    throw error;
+  }
+};
+
 const RestaurantMetricsRepository = {
   getRestaurantMetrics,
+  getRestaurantMetricsByRestoId,
 };
 
 module.exports = { RestaurantMetricsRepository };
