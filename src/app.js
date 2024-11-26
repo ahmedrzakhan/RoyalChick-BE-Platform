@@ -135,7 +135,7 @@ app.use('/api/shift', require('./Routes/shift.routes'));
 app.use('/api/attendance', require('./Routes/attendance.routes'));
 app.use(ErrorHandler.defaultErrorHandler);
 
-// Health check endpoint
+// Health check endpoints
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'UP',
