@@ -149,7 +149,7 @@ app.get('/health', (req, res) => {
 async function startServer() {
   try {
     await testConnection();
-    await initializeDatabase();
+   // await initializeDatabase();
 
     // await calculateDailyRestaurantsMetricsInBatches();
 
