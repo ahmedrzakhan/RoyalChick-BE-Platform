@@ -28,7 +28,9 @@ const verifyTokenForEmployee = async (req, res, next) => {
         const id = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         //verify from db
         const employee = await EmployeeService.getEmployeeById(id.id);
-        if (!employee[0]) return res.status(404).send('Employee not found');
+        if (!employee[0]) {
+          throw new Error('Employee not found');
+        }
         req.user = employee[0];
         next();
     } catch (error) {
