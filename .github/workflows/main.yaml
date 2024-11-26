@@ -1,42 +1,42 @@
-# name:  actions
-# on:
-#   push:
-#     branches:
-#       - main
-# env:
-#   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-#   USERNAME: ${{ secrets.USERNAME }}
-#   HOST: ${{ secrets.HOST }}
-# jobs:
-#   TRIGGER_UPDATE:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: checkout code
-#         uses: actions/checkout@v4
+name:  actions
+on:
+  push:
+    branches:
+      - main
+env:
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  USERNAME: ${{ secrets.USERNAME }}
+  HOST: ${{ secrets.HOST }}
+jobs:
+  TRIGGER_UPDATE:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
 
-#       - name: Transfer and deploy code
-#         run: |
-#           echo "Setting up the environment"
-#           echo "${{ env.PRIVATE_KEY }}" > private_key 
-#           chmod 600 private_key
+      - name: Transfer and deploy code
+        run: |
+          echo "Setting up the environment"
+          echo "${{ env.PRIVATE_KEY }}" > private_key 
+          chmod 600 private_key
 
-#           echo "Transferring code to the server"
-#           scp -o StrictHostKeyChecking=no -i private_key -r ./* ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
-#           echo "Code transferred successfully"
-#           # Creating .env file on EC2
-#           echo "Creating .env file with secrets"
-#           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
-#             echo "DB_HOST=${{ secrets.DB_HOST }}" > /home/ubuntu/api/.env
-#             echo "DB_USER=${{ secrets.DB_USER }}" >> /home/ubuntu/api/.env
-#             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/ubuntu/api/.env
-#             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/ubuntu/api/.env
-#             echo "ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}" >> /home/ubuntu/api/.env
-#           EOF
+          echo "Transferring code to the server"
+          scp -o StrictHostKeyChecking=no -i private_key -r ./* ${{ env.USERNAME }}@${{ env.HOST }}:/home/ubuntu/api
+          echo "Code transferred successfully"
+          # Creating .env file on EC2
+          echo "Creating .env file with secrets"
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
+            echo "DB_HOST=${{ secrets.DB_HOST }}" > /home/ubuntu/api/.env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> /home/ubuntu/api/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/ubuntu/api/.env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/ubuntu/api/.env
+            echo "ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}" >> /home/ubuntu/api/.env
+          EOF
 
-#           echo "Starting SSH session to deploy"
-#           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
-#             cd /home/ubuntu/api/
-#             sudo npm install
-#             pm2 start src/app.js --node-args="--env-file .env"
-#             echo "Deployment complete"
-#           EOF
+          echo "Starting SSH session to deploy"
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
+            cd /home/ubuntu/api/
+            sudo npm install
+            pm2 start src/app.js --node-args="--env-file .env"
+            echo "Deployment complete"
+          EOF
