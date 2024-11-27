@@ -47,14 +47,14 @@ const corsOptions = {
     const environment = CONFIG.NODE_ENV;
     const currentAllowedOrigins = allowedOrigins[environment];
 
-    if (
-      (!origin && environment != CONSTANTS.PRODUCTION_ENV) ||
-      currentAllowedOrigins.includes(origin)
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // if (
+    //   (!origin && environment != CONSTANTS.PRODUCTION_ENV) ||
+    //   currentAllowedOrigins.includes(origin)
+    // ) {
+    callback(null, true);
+    // } else {
+    //   callback(new Error('Not allowed by CORS'));
+    // }
   },
   methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -149,7 +149,7 @@ app.get('/health', (req, res) => {
 async function startServer() {
   try {
     await testConnection();
-   // await initializeDatabase();
+    // await initializeDatabase();
 
     // await calculateDailyRestaurantsMetricsInBatches();
 
