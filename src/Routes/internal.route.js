@@ -5,19 +5,19 @@ const kitenStaffRouter = require('./kitchenStaff.route');
 const mangerRouter = require('./manager.route');
 const executiveRouter = require('./executive.route');
 const { Autheticator } = require('./../middleware/authenticate');
-
+const {
+  verifyUserTypeIsKitchenStaff,
+  verifyUserTypeIsManager,
+  verifyUserTypeIsExecutive,
+} = require('../middleware/auth');
 const router = express.Router();
 
 // router.use('/staff', authenticateStaff, staffRouter);
 
-router.use(
-  '/kitchenStaff',
-  Autheticator.authenticateKitchenStaff,
-  kitenStaffRouter,
-);
+router.use('/kitchenStaff', verifyUserTypeIsKitchenStaff, kitenStaffRouter);
 
-router.use('/manager', Autheticator.authenticateManager, mangerRouter);
+router.use('/manager', verifyUserTypeIsManager, mangerRouter);
 
-router.use('/executive', Autheticator.authenticateExecutive, executiveRouter);
+router.use('/executive', verifyUserTypeIsExecutive, executiveRouter);
 
 module.exports = router;
