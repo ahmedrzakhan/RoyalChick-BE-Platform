@@ -13,10 +13,13 @@ const registerUser = async (req, res) => {
     const user = await UserService.saveUser(req.body);
     //retrieve user
     const newUser = await UserService.getFullUser(user.email);
-    const token = generateAccessToken({ id: newUser[0][0].id });
+    const token = generateAccessToken({
+      id: newUser[0][0].id,
+      position: newUser.position,
+    });
     console.log(user);
     delete newUser[0][0].password;
-    res.send({...newUser[0][0], token: token});
+    res.send({ ...newUser[0][0], token: token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -33,7 +36,10 @@ const loginUser = async (req, res, next) => {
       throw new Error('Invalid credentials');
     }
     //generate token
-    const token = generateAccessToken({ id: user[0][0].id });
+    const token = generateAccessToken({
+      id: user[0][0].id,
+      email: user[0][0].position,
+    });
     const response = { token: token };
     res.send(response);
   } catch (error) {

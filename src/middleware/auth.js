@@ -7,11 +7,15 @@ const verifyToken = async (req, res, next) => {
     const token = authHeader && authHeader.split('Bearer ')[1];
     if (token == null) return res.status(401);
     //verify token
-    const id = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const tokenPayload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     //verify from db
-    const user = await UserService.getUserById(id.id);
+    const user = await UserService.getUserById(tokenPayload.id);
     if (!user[0]) return res.status(404).send('User not found');
     req.user = user[0][0];
+    req.user = {
+      ...req.user,
+      position: tokenPayload.position,
+    };
     next();
   } catch (error) {
     next(error);
