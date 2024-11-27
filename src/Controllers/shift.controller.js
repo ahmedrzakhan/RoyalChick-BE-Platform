@@ -3,6 +3,7 @@ const {ShiftService} = require('../Services/shift.service')
 const createShift=async (req,res,next)=>{
     try{
         const shift = req.body;
+        shift.restaurant_id = req.user.restaurant_id;
          await ShiftService.createNewShift(shift);
         res.send({message:"Shift created successfully"});
     }catch(error){

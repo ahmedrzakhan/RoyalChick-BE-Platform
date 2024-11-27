@@ -5,7 +5,8 @@ const createEmployee = async (req, res) => {
     req.body.restaurant_id = req.user.restaurant_id;
   try {
     const employee = await EmployeeService.createNewEmployee(req.body);
-    res.send({message: 'Employee created successfully'});
+    delete employee.password;
+    res.send({...employee, token: generateAccessToken({ id: employee.id })});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,14 +1,5 @@
 const { OrderService } = require('../Services/order.service');
 
-const CreateOrder = async (req, res) => {
-  try {
-    const order = await OrderService.saveOrder(req.body, req.user.id);
-    res.send(order);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 const createOrderItem = async (req, res) => {
   try {
     const order = await OrderService.saveOrderItem(req.body);
@@ -17,6 +8,24 @@ const createOrderItem = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+const CreateOrder = async (req, res) => {
+  try {
+    const order = await OrderService.saveOrder(req.body, req.user.id);
+    const items = req.body.order_items;
+    for (let i = 0; i < items.length; i++) {
+      items[i].order_id = order.id;
+      await OrderService.saveOrderItem(items[i]);
+
+    }
+    res.send({ id: order.id, ...req.body});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 const getAllOrdersByCustomer = async (req, res) => {
   try {

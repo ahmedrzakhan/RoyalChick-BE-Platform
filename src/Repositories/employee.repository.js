@@ -1,7 +1,6 @@
 const { pool } = require('../config/database');
 
 const createEmployee = async (employee) => {
-    console.log(employee);
   const query = `INSERT INTO employees (name, password, restaurant_id, position,hire_date, salary, status, email) VALUES (?,?,?,?,?,?,?,?);`;
   await pool.execute(query, [
     employee.name,
