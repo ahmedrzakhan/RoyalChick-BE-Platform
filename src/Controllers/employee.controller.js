@@ -5,8 +5,10 @@ const createEmployee = async (req, res) => {
   req.body.restaurant_id = req.user.restaurant_id;
   try {
     const employee = await EmployeeService.createNewEmployee(req.body);
+    //retrieve employee
+    const newEmployee = await EmployeeService.getEmployeeByEmail(req.body.email);
     delete employee.password;
-    res.send({...employee, token: generateAccessToken({ id: employee.id })});
+    res.send({...employee, position: employee.position,  token: generateAccessToken({ id: employee.id, position: employee.position })});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -26,8 +28,7 @@ const generateEmployeeToken = async (req, res) => {
       id: employee[0].id,
       position: employee[0].position,
     });
-    const response = { token: token };
-    res.send(response);
+    res.send({...employee[0], token: token});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

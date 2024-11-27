@@ -13,11 +13,11 @@ const registerUser = async (req, res) => {
     const user = await UserService.saveUser(req.body);
     //retrieve user
     const newUser = await UserService.getFullUser(user.email);
+    newUser[0][0].position = 'CUSTOMER'
     const token = generateAccessToken({
       id: newUser[0][0].id,
       position: newUser.position,
     });
-    console.log(user);
     delete newUser[0][0].password;
     res.send({ ...newUser[0][0], token: token });
   } catch (error) {
@@ -35,12 +35,14 @@ const loginUser = async (req, res, next) => {
     if (user[0][0].password != req.body.password) {
       throw new Error('Invalid credentials');
     }
+    user[0][0].position = "CUSTOMER"
     //generate token
     const token = generateAccessToken({
       id: user[0][0].id,
-      email: user[0][0].position,
+      position: user[0][0].position,
     });
-    const response = { token: token };
+    delete user[0][0].password;
+    const response = { ...user[0][0], token: token };
     res.send(response);
   } catch (error) {
     res.status(500).json({ error: error.message });
