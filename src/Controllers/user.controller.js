@@ -11,7 +11,12 @@ const getUser = async (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const user = await UserService.saveUser(req.body);
-    res.send({user: "User created successfully"});
+    //retrieve user
+    const newUser = await UserService.getFullUser(user.email);
+    const token = generateAccessToken({ id: newUser[0][0].id });
+    console.log(user);
+    delete newUser[0][0].password;
+    res.send({...newUser[0][0], token: token});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
