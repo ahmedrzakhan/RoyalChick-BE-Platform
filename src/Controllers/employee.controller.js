@@ -71,6 +71,17 @@ const getCompletedOrdersInEmployeeRestaurant = async (req, res) => {
   }
 };
 
+const getNotCompletedOrdersInEmployeeRestaurant = async (req, res) => {
+    try {
+      const restaurant_id = req.user.restaurant_id;
+      const orders =
+        await OrderService.getNotComletedOrdersInARestaurant(restaurant_id);
+      res.send(orders);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
 const getEmployeeInAManagerRestaurant = async (req, res) => {
   try {
     const restaurant_id = req.user.restaurant_id;
@@ -96,6 +107,7 @@ const EmployeeController = {
   getSignedInEmployee,
   getCompletedOrdersInEmployeeRestaurant,
   getEmployeeInAManagerRestaurant,
+  getNotCompletedOrdersInEmployeeRestaurant
 };
 
 module.exports = { EmployeeController };

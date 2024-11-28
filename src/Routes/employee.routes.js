@@ -8,6 +8,7 @@ router.post('/create',verifyTokenForEmployee, verifyUserTypeIsManager, EmployeeC
 router.post('/login', EmployeeController.generateEmployeeToken);
 router.get('/get',verifyTokenForEmployee , EmployeeController.getSignedInEmployee);
 router.get('/get/orders',verifyTokenForEmployee , EmployeeController.getCompletedOrdersInEmployeeRestaurant);
+router.get('/get/orders/pending',verifyTokenForEmployee , EmployeeController.getNotCompletedOrdersInEmployeeRestaurant);
 //get all employees in a manager's restaurant
 router.get('/get/employees',verifyTokenForEmployee, verifyUserTypeIsManager, EmployeeController.getEmployeeInAManagerRestaurant);
 //modify employee details

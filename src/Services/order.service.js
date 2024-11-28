@@ -12,6 +12,10 @@ const getOrdersByCustomerId = async (customer_id) => {
 const getComletedOrdersInARestaurant = async (resturnt_id) => {
     return await OrderRepository.getComletedOrdersInARestaurant(resturnt_id);
 }
+
+const getNotComletedOrdersInARestaurant = async (resturnt_id) => {
+  return await OrderRepository.getNotComletedOrdersInARestaurant(resturnt_id);
+}
 const saveOrderItem = async (order_item) => {
   return await OrderRepository.createOrderItem(order_item);
 };
@@ -36,14 +40,11 @@ const editOrder = async (order, order_id) => {
   const initialOrder = await OrderRepository.trackOrder(order_id);
 
   const editedOrdeer = {
-    order_type: order.order_type
-      ? order.order_type
-      : initialOrder[0].order_type,
     status: order.status ? order.status : initialOrder[0].status,
     total_amount: order.total_amount
       ? order.total_amount
       : initialOrder[0].total_amount,
-    payment_status: order.status ? order.status : initialOrder[0][0].status,
+    payment_status: order.payment_status ? order.payment_status : initialOrder[0][0].payment_status,
   };
   return await OrderRepository.editOrder(editedOrdeer, order_id);
 };
@@ -54,7 +55,8 @@ const OrderService = {
   getOrderById,
   getOrderItemsByOrderId,
   editOrder,
-  getComletedOrdersInARestaurant
+  getComletedOrdersInARestaurant,
+  getNotComletedOrdersInARestaurant
 };
 
 module.exports = { OrderService };

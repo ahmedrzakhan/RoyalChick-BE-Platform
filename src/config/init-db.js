@@ -249,8 +249,13 @@ async function initializeDatabase() {
 //create view for completed orders
 await connection.execute(`CREATE OR REPLACE VIEW completed_orders 
   AS
-  SELECT id, payment_status, restaurant_id 
+  SELECT id, payment_status, restaurant_id, customer_id
   from orders where status='COMPLETED';`);
+//create views for not completed orders
+  await connection.execute(`CREATE OR REPLACE VIEW not_completed_orders 
+  AS
+  SELECT id, payment_status, restaurant_id, customer_id
+  from orders where status='PENDING' OR status='PREPARING';`);
 
     console.log('Database initialized successfully');
     return true;

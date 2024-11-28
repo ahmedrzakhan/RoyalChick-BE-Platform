@@ -64,12 +64,14 @@ const getOrderItemsByOrderId = async (order_id) => {
 };
 
 const editOrder = async (order, order_id) => {
+  console.log(order);
   try {
-    const query = `UPDATE orders SET  total_amount = ?, payment_status = ? WHERE id = ?;`;
+    const query = `UPDATE orders SET  total_amount = ?, payment_status = ?, status=? WHERE id = ?;`;
     const result = await pool.execute(query, [
       order.total_amount,
       order.payment_status,
-      3,
+      order.status,
+      order_id,
     ]);
     return order;
   } catch (error) {
@@ -88,13 +90,24 @@ const getComletedOrdersInARestaurant = async (resturnt_id) => {
     }
 }
 
+const getNotComletedOrdersInARestaurant = async (resturnt_id) => {
+  try {
+      const query = `SELECT * FROM not_completed_orders where restaurant_id = ?;`;
+      const result = await pool.execute(query, [resturnt_id]);
+      return result[0];
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 const OrderRepository = {
   createOrder,
   createOrderItem,
   getOrdersByCustomerId,
   trackOrder,
   getOrderItemsByOrderId,
-  editOrder,getComletedOrdersInARestaurant
+  editOrder,getComletedOrdersInARestaurant,
+  getNotComletedOrdersInARestaurant
 };
 
 module.exports = { OrderRepository };
