@@ -38,8 +38,8 @@ app.use(
 );
 
 const allowedOrigins = {
-  STAGING: ['https://api-staging.peekabox.co', 'http://localhost:8100'],
-  PRODUCTION: ['api.peekabox.co'],
+  STAGING: ['https://api-staging.peekabox.co', 'http://localhost:8100', '*'],
+  PRODUCTION: ['api.peekabox.co', '*'],
 };
 
 const corsOptions = {
