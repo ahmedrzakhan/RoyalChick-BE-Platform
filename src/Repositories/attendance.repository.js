@@ -17,7 +17,7 @@ const createattendance = async (attendance) => {
         console.log(error);
     }
 }
-
+//
 const getAttendanceByEmployeeId = async (employee_id) => {
     try {
         const query = `SELECT * FROM attendance WHERE employee_id = ?;`;
