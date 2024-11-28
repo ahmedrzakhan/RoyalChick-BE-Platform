@@ -62,7 +62,7 @@ const corsOptions = {
 };
 
 // app.use(cors(corsOptions));
-app.use(cors(cors({ credentials: true, origin: "*" })))
+app.use((cors({ credentials: true, origin: "*" })))
 
 // 2. Basic middleware
 app.use(express.json());
